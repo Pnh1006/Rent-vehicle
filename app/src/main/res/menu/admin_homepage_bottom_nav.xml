@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/nav_admin_homepage"
+        android:icon="@drawable/home"
+        android:title="@string/trang_chu" />
+    <item
+        android:id="@+id/nav_admin_account"
+        android:icon="@drawable/person"
+        android:title="@string/tai_khoan" />
+    <item
+        android:id="@+id/nav_admin_transaction"
+        android:icon="@drawable/credit_card"
+        android:title="@string/giao_dich" />
+    <item
+        android:id="@+id/nav_admin_vehicle"
+        android:icon="@drawable/directions_bike"
+        android:title="@string/xe" />
+<!--    <item-->
+<!--        android:id="@+id/nav_admin_rent_vehicle"-->
+<!--        android:icon="@drawable/event_note"-->
+<!--        android:title="@string/quan_ly_thue_xe" />-->
+</menu>

@@ -1,0 +1,319 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/primary_background"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/inf_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="4dp"
+            app:cardUseCompatPadding="true">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:id="@+id/tv_title_register"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/title_font"
+                    android:text="@string/thong_tin_khach_hang"
+                    android:textColor="@color/title_color"
+                    android:textSize="24sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:fontFamily="@font/primary_font"
+                    android:text="@string/dien_thong_tin_khach_hang"
+                    android:textColor="@color/primary_text_color"
+                    android:textSize="14sp" />
+
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/inf_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="4dp"
+            app:cardUseCompatPadding="true">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/layout_full_name"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
+                    android:hint="@string/nhap_ho_ten"
+                    app:boxStrokeColor="@color/primary_text_color"
+                    app:hintTextColor="@color/primary_text_color">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/et_full_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/primary_font"
+                        android:inputType="textPersonName"
+                        android:maxLines="1"
+                        android:textColor="@color/primary_text_color"
+                        android:textSize="13sp"
+                        tools:ignore="TouchTargetSizeCheck,VisualLintTextFieldSize,TextContrastCheck" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/layout_phone"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
+                    android:hint="@string/so_dien_thoai"
+                    app:boxStrokeColor="@color/primary_text_color"
+                    app:hintTextColor="@color/primary_text_color">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/tv_phone"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:enabled="false"
+                        android:fontFamily="@font/primary_font"
+                        android:inputType="phone"
+                        android:maxLines="1"
+                        android:textColor="@color/primary_text_color"
+                        android:textSize="13sp"
+                        tools:ignore="TouchTargetSizeCheck,VisualLintTextFieldSize" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/layout_cccd"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
+                    android:hint="@string/nhap_so_cccd"
+                    app:boxStrokeColor="@color/primary_text_color"
+                    app:hintTextColor="@color/primary_text_color">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/et_cccd"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/primary_font"
+                        android:inputType="number"
+                        android:maxLength="12"
+                        android:maxLines="1"
+                        android:textColor="@color/primary_text_color"
+                        android:textSize="13sp"
+                        tools:ignore="TouchTargetSizeCheck,VisualLintTextFieldSize,TextContrastCheck" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:fontFamily="@font/sub_title_font"
+                    android:text="@string/gioi_tinh"
+                    android:textColor="@color/primary_text_color"
+                    android:textSize="13sp" />
+
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
+                    app:cardCornerRadius="8dp"
+                    app:cardElevation="2dp"
+                    app:strokeColor="@color/border_color"
+                    app:strokeWidth="1dp">
+
+                    <RadioGroup
+                        android:id="@+id/rg_gender"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:orientation="horizontal"
+                        android:padding="16dp">
+
+                        <com.google.android.material.radiobutton.MaterialRadioButton
+                            android:id="@+id/rb_male"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:checked="true"
+                            android:fontFamily="@font/primary_font"
+                            android:text="@string/nam"
+                            android:textColor="@color/primary_text_color"
+                            android:textSize="13sp"
+                            app:buttonTint="@color/primary_color"
+                            tools:ignore="VisualLintButtonSize" />
+
+                        <com.google.android.material.radiobutton.MaterialRadioButton
+                            android:id="@+id/rb_female"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/primary_font"
+                            android:text="@string/nu"
+                            android:textColor="@color/primary_text_color"
+                            android:textSize="13sp"
+                            app:buttonTint="@color/primary_color"
+                            tools:ignore="VisualLintButtonSize" />
+
+                        <com.google.android.material.radiobutton.MaterialRadioButton
+                            android:id="@+id/rb_other"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/primary_font"
+                            android:text="@string/khac"
+                            android:textColor="@color/primary_text_color"
+                            android:textSize="13sp"
+                            app:buttonTint="@color/primary_color"
+                            tools:ignore="VisualLintButtonSize" />
+
+                    </RadioGroup>
+
+                </com.google.android.material.card.MaterialCardView>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/layout_birth_date"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
+                    android:hint="@string/nhap_ngay_sinh"
+                    app:boxStrokeColor="@color/primary_text_color"
+                    app:hintTextColor="@color/primary_text_color">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/edNgaySinh"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:clickable="true"
+                        android:focusable="false"
+                        android:fontFamily="@font/primary_font"
+                        android:inputType="none"
+                        android:maxLines="1"
+                        android:textColor="@color/primary_text_color"
+                        android:textSize="13sp"
+                        tools:ignore="TouchTargetSizeCheck,VisualLintTextFieldSize,TextContrastCheck" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/inf_button1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="4dp"
+            app:cardUseCompatPadding="true">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnDoiMatKhau"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:fontFamily="@font/title_font"
+                    android:padding="15dp"
+                    android:text="@string/doi_mat_khau"
+                    android:textColor="@color/title_color"
+                    android:textSize="14sp"
+                    app:backgroundTint="@color/primary_background"
+                    app:cornerRadius="12dp"
+                    app:rippleColor="@color/title_color"
+                    app:strokeColor="@color/border_color"
+                    app:strokeWidth="1dp" />
+
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <LinearLayout
+            android:id="@+id/inf_button2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:paddingBottom="16dp"
+            android:weightSum="3">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnSave"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="8dp"
+                android:layout_weight="1"
+                android:fontFamily="@font/title_font"
+                android:text="@string/luu"
+                android:textColor="@color/title_color"
+                android:textSize="16sp"
+                app:backgroundTint="@color/primary_background"
+                app:cornerRadius="12dp"
+                app:rippleColor="@color/title_color"
+                app:strokeColor="@color/border_color"
+                app:strokeWidth="1dp"
+                tools:ignore="VisualLintButtonSize" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnCancle"
+                style="@style/Widget.MaterialComponents.Button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_weight="1"
+                android:fontFamily="@font/sub_title_font"
+                android:text="@string/huy"
+                android:textColor="@color/primary_background"
+                android:textSize="16sp"
+                app:backgroundTint="@color/title_color"
+                app:cornerRadius="12dp"
+                app:rippleColor="@color/primary_background"
+                tools:ignore="VisualLintButtonSize" />
+
+        </LinearLayout>
+
+        <FrameLayout
+            android:id="@+id/user_setting_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone" />
+
+    </LinearLayout>
+</ScrollView>

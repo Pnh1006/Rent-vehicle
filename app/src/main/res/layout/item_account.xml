@@ -1,0 +1,308 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    app:cardBackgroundColor="@color/primary_background"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="4dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingBottom="12dp">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/txtHoTen"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/sub_title_font"
+                    android:textColor="@color/primary_text_color"
+                    android:textSize="16sp"
+                    tools:text="Nguyễn Văn A" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/txtTrangThai"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/sub_title_font"
+                android:paddingHorizontal="12dp"
+                android:paddingVertical="4dp"
+                android:textColor="@color/primary_text_color"
+                android:textSize="12sp"
+                tools:text="Hoạt động" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingBottom="12dp"
+            tools:ignore="DisableBaselineAlignment">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingVertical="3dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="6dp"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/sub_title_font"
+                        android:text="@string/so_dien_thoai"
+                        android:textColor="@color/primary_text_color"
+                        android:textSize="12sp" />
+
+                    <TextView
+                        android:id="@+id/txtSDT"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/primary_font"
+                        android:textColor="@color/primary_text_color"
+                        android:textSize="12sp"
+                        tools:text="123456789" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingVertical="3dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="6dp"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/sub_title_font"
+                        android:text="@string/cccd"
+                        android:textColor="@color/primary_text_color"
+                        android:textSize="12sp" />
+
+                    <TextView
+                        android:id="@+id/txtCCCD"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/primary_font"
+                        android:textColor="@color/primary_text_color"
+                        android:textSize="12sp"
+                        tools:text="123456789" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingVertical="3dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="6dp"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/sub_title_font"
+                        android:text="@string/ngay_sinh"
+                        android:textColor="@color/primary_text_color"
+                        android:textSize="12sp" />
+
+                    <TextView
+                        android:id="@+id/txtNgaySinh"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/primary_font"
+                        android:textColor="@color/primary_text_color"
+                        android:textSize="12sp"
+                        tools:text="01/01/1990" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingVertical="3dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="6dp"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/sub_title_font"
+                        android:text="@string/mat_khau"
+                        android:textColor="@color/primary_text_color"
+                        android:textSize="12sp" />
+
+                    <TextView
+                        android:id="@+id/txtMatKhau"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/primary_font"
+                        android:textColor="@color/primary_text_color"
+                        android:textSize="12sp"
+                        tools:text="1236723" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingVertical="3dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="6dp"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/sub_title_font"
+                        android:text="@string/gioi_tinh"
+                        android:textColor="@color/primary_text_color"
+                        android:textSize="12sp" />
+
+                    <TextView
+                        android:id="@+id/txtGioiTinh"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/primary_font"
+                        android:textColor="@color/primary_text_color"
+                        android:textSize="12sp"
+                        tools:text="Nam" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingVertical="3dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="6dp"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/sub_title_font"
+                        android:text="@string/vai_tro"
+                        android:textColor="@color/primary_text_color"
+                        android:textSize="12sp" />
+
+                    <TextView
+                        android:id="@+id/txtVaiTro"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/primary_font"
+                        android:textColor="@color/primary_text_color"
+                        android:textSize="12sp"
+                        tools:text="User" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            tools:ignore="DisableBaselineAlignment">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:fontFamily="@font/sub_title_font"
+                    android:text="@string/dang_ky"
+                    android:textColor="@color/primary_text_color"
+                    android:textSize="11sp" />
+
+                <TextView
+                    android:id="@+id/txtNgayDangKy"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:fontFamily="@font/primary_font"
+                    android:textColor="@color/primary_text_color"
+                    android:textSize="11sp"
+                    tools:text="15/03/2024" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btnCapNhat"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:backgroundTint="@color/primary_background"
+                    android:fontFamily="@font/sub_title_font"
+                    android:text="@string/sua"
+                    android:textColor="@color/title_color"
+                    tools:ignore="ButtonStyle,TextContrastCheck" />
+
+                <Button
+                    android:id="@+id/btnXoa"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/primary_background"
+                    android:fontFamily="@font/sub_title_font"
+                    android:text="@string/xoa"
+                    android:textColor="@color/title_color"
+                    tools:ignore="ButtonStyle,TextContrastCheck" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    app:cardBackgroundColor="@color/primary_background"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="4dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="5dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/txtTenXe"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/sub_title_font"
+                android:textColor="@color/primary_text_color"
+                android:textSize="16sp"
+                tools:text="Honda City" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            tools:ignore="DisableBaselineAlignment">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingVertical="3dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="6dp"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/sub_title_font"
+                        android:text="@string/bien_so"
+                        android:textColor="@color/primary_text_color"
+                        android:textSize="12sp" />
+
+                    <TextView
+                        android:id="@+id/txtBienSo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/primary_font"
+                        android:textColor="@color/primary_text_color"
+                        android:textSize="12sp"
+                        tools:text="30A-12345" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingVertical="3dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="6dp"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/sub_title_font"
+                        android:text="@string/gia_thue"
+                        android:textColor="@color/primary_text_color"
+                        android:textSize="12sp" />
+
+                    <TextView
+                        android:id="@+id/txtGiaThue"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/primary_font"
+                        android:textColor="@color/primary_text_color"
+                        android:textSize="12sp"
+                        tools:text="500,000đ" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingVertical="3dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="6dp"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/sub_title_font"
+                        android:text="@string/nam_sx"
+                        android:textColor="@color/primary_text_color"
+                        android:textSize="12sp" />
+
+                    <TextView
+                        android:id="@+id/txtNamSX"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/primary_font"
+                        android:textColor="@color/primary_text_color"
+                        android:textSize="12sp"
+                        tools:text="2020" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingVertical="3dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="6dp"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/sub_title_font"
+                        android:text="@string/mau_sac"
+                        android:textColor="@color/primary_text_color"
+                        android:textSize="12sp" />
+
+                    <TextView
+                        android:id="@+id/txtMauSac"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/primary_font"
+                        android:textColor="@color/primary_text_color"
+                        android:textSize="12sp"
+                        tools:text="Trắng" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingVertical="3dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="6dp"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/sub_title_font"
+                        android:text="@string/loai_xe"
+                        android:textColor="@color/primary_text_color"
+                        android:textSize="12sp" />
+
+                    <TextView
+                        android:id="@+id/txtLoaiXe"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/primary_font"
+                        android:textColor="@color/primary_text_color"
+                        android:textSize="12sp"
+                        tools:text="Sedan" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="6dp"
+                android:fontFamily="@font/sub_title_font"
+                android:text="@string/hinh_anh"
+                android:textColor="@color/primary_text_color"
+                android:textSize="12sp" />
+
+            <ImageView
+                android:id="@+id/imgPreview"
+                android:layout_width="match_parent"
+                android:layout_height="180dp"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="4dp"
+                android:background="#E0E0E0"
+                android:scaleType="centerCrop"
+                tools:ignore="ContentDescription,ImageContrastCheck,VisualLintBounds" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            tools:ignore="DisableBaselineAlignment">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:fontFamily="@font/sub_title_font"
+                    android:text="@string/trang_thai"
+                    android:textColor="@color/primary_text_color"
+                    android:textSize="11sp" />
+
+                <TextView
+                    android:id="@+id/txtTrangThai"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:fontFamily="@font/primary_font"
+                    android:text="Có sẵn"
+                    android:textColor="@color/primary_text_color"
+                    android:textSize="11sp"
+                    tools:ignore="HardcodedText" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btnCapNhat"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:backgroundTint="@color/primary_background"
+                    android:fontFamily="@font/sub_title_font"
+                    android:text="@string/sua"
+                    android:textColor="@color/title_color"
+                    tools:ignore="ButtonStyle,TextContrastCheck" />
+
+                <Button
+                    android:id="@+id/btnXoa"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/primary_background"
+                    android:fontFamily="@font/sub_title_font"
+                    android:text="@string/xoa"
+                    android:textColor="@color/title_color"
+                    tools:ignore="ButtonStyle,TextContrastCheck" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

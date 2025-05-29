@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    android:background="@drawable/customer_border"
+    android:backgroundTint="@color/primary_background"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?android:attr/selectableItemBackground"
+    android:orientation="horizontal"
+    android:padding="12dp">
+
+    <ImageView
+        android:id="@+id/ivImageVehicle"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_gravity="center_vertical"
+        android:layout_marginEnd="16dp"
+        android:scaleType="centerCrop"
+        tools:src="@drawable/directions_bike" />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="4dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fontFamily="@font/sub_title_font"
+                android:text="@string/ten_xe"
+                android:textColor="@color/primary_text_color"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/txtTenXe"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:fontFamily="@font/primary_font"
+                android:textColor="@color/primary_text_color"
+                android:textSize="14sp"
+                tools:text="Toyota Camry" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="4dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fontFamily="@font/sub_title_font"
+                android:text="@string/bien_so"
+                android:textColor="@color/primary_text_color"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/txtBienSo"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:fontFamily="@font/primary_font"
+                android:textColor="@color/primary_text_color"
+                android:textSize="13sp"
+                tools:text="30A-12345" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="4dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fontFamily="@font/sub_title_font"
+                android:text="@string/gia_thue"
+                android:textColor="@color/primary_text_color"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/txtGiaThue"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:fontFamily="@font/primary_font"
+                android:textColor="@color/primary_text_color"
+                android:textSize="14sp"
+                tools:text="500,000 VNĐ/ngày" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="4dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fontFamily="@font/sub_title_font"
+                android:text="@string/loai_xe"
+                android:textColor="@color/primary_text_color"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/txtHangXe"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:fontFamily="@font/primary_font"
+                android:textColor="@color/primary_text_color"
+                android:textSize="13sp"
+                tools:text="Sedan" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fontFamily="@font/sub_title_font"
+                android:text="@string/trang_thai"
+                android:textColor="@color/primary_text_color"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/txtTrangThai"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:fontFamily="@font/primary_font"
+                android:textColor="@color/primary_text_color"
+                android:textSize="13sp"
+                tools:text="Có sẵn" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/txtThueXe"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:backgroundTint="@color/primary_color"
+            android:clickable="true"
+            android:focusable="true"
+            android:fontFamily="@font/sub_title_font"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:paddingHorizontal="16dp"
+            android:paddingVertical="8dp"
+            android:text="@string/thue_xe"
+            android:textColor="@color/primary_text_color"
+            android:textSize="14sp" />
+
+    </LinearLayout>
+
+</LinearLayout>
