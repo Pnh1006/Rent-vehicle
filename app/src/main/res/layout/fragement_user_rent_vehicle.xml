@@ -6,14 +6,12 @@
     android:layout_height="match_parent"
     android:background="@color/primary_background">
 
-    <!-- Container for UserRentVehicleStart fragment -->
     <FrameLayout
         android:id="@+id/user_rent_vehicle_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:visibility="gone" />
 
-    <!-- Original ScrollView for rental info -->
     <ScrollView
         android:id="@+id/scrollViewRentalInfo"
         android:layout_width="match_parent"
@@ -89,10 +87,10 @@
                             android:id="@+id/tvHoTen"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:enabled="false"
                             android:fontFamily="@font/primary_font"
                             android:textColor="@color/primary_text_color"
                             android:textSize="13sp"
-                            android:enabled="false"
                             tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -110,10 +108,10 @@
                             android:id="@+id/tvCCCD"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:enabled="false"
                             android:fontFamily="@font/primary_font"
                             android:textColor="@color/primary_text_color"
                             android:textSize="13sp"
-                            android:enabled="false"
                             tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -131,10 +129,10 @@
                             android:id="@+id/tvSDT"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:enabled="false"
                             android:fontFamily="@font/primary_font"
                             android:textColor="@color/primary_text_color"
                             android:textSize="13sp"
-                            android:enabled="false"
                             tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -151,10 +149,10 @@
                             android:id="@+id/tvNgayDat"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:enabled="false"
                             android:fontFamily="@font/primary_font"
                             android:textColor="@color/primary_text_color"
                             android:textSize="13sp"
-                            android:enabled="false"
                             tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -200,10 +198,10 @@
                             android:id="@+id/tvTenXe"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:enabled="false"
                             android:fontFamily="@font/primary_font"
                             android:textColor="@color/primary_text_color"
                             android:textSize="13sp"
-                            android:enabled="false"
                             tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -221,10 +219,10 @@
                             android:id="@+id/tvBienSo"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:enabled="false"
                             android:fontFamily="@font/primary_font"
                             android:textColor="@color/primary_text_color"
                             android:textSize="13sp"
-                            android:enabled="false"
                             tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -242,10 +240,10 @@
                             android:id="@+id/tvLoaiXe"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:enabled="false"
                             android:fontFamily="@font/primary_font"
                             android:textColor="@color/primary_text_color"
                             android:textSize="13sp"
-                            android:enabled="false"
                             tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -264,10 +262,10 @@
                             android:id="@+id/tvGiaThue"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:enabled="false"
                             android:fontFamily="@font/primary_font"
                             android:textColor="@color/primary_text_color"
                             android:textSize="13sp"
-                            android:enabled="false"
                             tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -285,10 +283,10 @@
                             android:id="@+id/tvTienCoc"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:enabled="false"
                             android:fontFamily="@font/primary_font"
                             android:textColor="@color/primary_text_color"
                             android:textSize="13sp"
-                            android:enabled="false"
                             tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -335,10 +333,10 @@
                             android:id="@+id/tvNgayBatDauDK"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:enabled="false"
                             android:fontFamily="@font/primary_font"
                             android:textColor="@color/primary_text_color"
                             android:textSize="13sp"
-                            android:enabled="false"
                             tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -356,10 +354,10 @@
                             android:id="@+id/tvNgayKetThucDK"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:enabled="false"
                             android:fontFamily="@font/primary_font"
                             android:textColor="@color/primary_text_color"
                             android:textSize="13sp"
-                            android:enabled="false"
                             tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -377,10 +375,10 @@
                             android:id="@+id/tcNgayBatDauTT"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:enabled="false"
                             android:fontFamily="@font/primary_font"
                             android:textColor="@color/primary_text_color"
                             android:textSize="13sp"
-                            android:enabled="false"
                             tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -397,17 +395,86 @@
                             android:id="@+id/tvNgayHienTai"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:enabled="false"
                             android:fontFamily="@font/primary_font"
                             android:textColor="@color/primary_text_color"
                             android:textSize="13sp"
-                            android:enabled="false"
                             tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />
                     </com.google.android.material.textfield.TextInputLayout>
 
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- Payment Information Section -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="4dp"
+                app:strokeWidth="0dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="16dp"
+                        android:fontFamily="@font/sub_title_font"
+                        android:gravity="center"
+                        android:text="@string/thong_tin_thanh_toan_coc"
+                        android:textColor="@color/primary_text_color"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/tilTrangThaiThanhToan"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="12dp"
+                        android:hint="@string/trang_thai_thanhtoan"
+                        app:boxStrokeColor="@color/primary_text_color"
+                        app:hintTextColor="@color/primary_text_color">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/tvTrangThaiThanhToan"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:enabled="false"
+                            android:fontFamily="@font/primary_font"
+                            android:textColor="@color/primary_text_color"
+                            android:textSize="13sp"
+                            tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/tilGhiChu"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/ghi_chu_chi_tiet"
+                        app:boxStrokeColor="@color/primary_text_color"
+                        app:hintTextColor="@color/primary_text_color">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/tvGhiChu"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/primary_font"
+                            android:gravity="top"
+                            android:minLines="2"
+                            android:textColor="@color/primary_text_color"
+                            android:textSize="13sp"
+                            tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -448,10 +515,10 @@
                             android:id="@+id/tvThanhTien"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:enabled="false"
                             android:fontFamily="@font/primary_font"
                             android:textColor="@color/primary_text_color"
                             android:textSize="13sp"
-                            android:enabled="false"
                             tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -470,10 +537,10 @@
                             android:id="@+id/tvThucTra"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:enabled="false"
                             android:fontFamily="@font/primary_font"
                             android:textColor="@color/primary_text_color"
                             android:textSize="13sp"
-                            android:enabled="false"
                             tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -497,84 +564,97 @@
                             tools:ignore="SpeakableTextPresentCheck,VisualLintTextFieldSize" />
                     </com.google.android.material.textfield.TextInputLayout>
 
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/tilTrangThaiThanhToan"
-                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="12dp"
-                        android:hint="@string/trang_thai_thanhtoan"
-                        app:boxStrokeColor="@color/primary_text_color"
-                        app:hintTextColor="@color/primary_text_color">
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/tvTrangThaiThanhToan"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/primary_font"
-                            android:textColor="@color/primary_text_color"
-                            android:textSize="13sp"
-                            android:enabled="false"
-                            tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/tilGhiChu"
-                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/ghi_chu_chi_tiet"
-                        app:boxStrokeColor="@color/primary_text_color"
-                        app:hintTextColor="@color/primary_text_color">
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/tvGhiChu"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/primary_font"
-                            android:gravity="top"
-                            android:minLines="2"
-                            android:textColor="@color/primary_text_color"
-                            android:textSize="13sp"
-                            tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />
-                    </com.google.android.material.textfield.TextInputLayout>
-
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- Action Button -->
-            <com.google.android.material.card.MaterialCardView
+
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                app:cardCornerRadius="25dp"
-                app:cardElevation="4dp"
-                app:strokeWidth="0dp">
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:padding="16dp"
+                android:weightSum="3">
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnDungThue"
+                <com.google.android.material.card.MaterialCardView
                     android:layout_width="match_parent"
-                    android:layout_height="56dp"
-                    android:layout_margin="4dp"
-                    android:fontFamily="@font/sub_title_font"
-                    android:text="@string/ket_thuc_thue"
-                    android:textColor="@android:color/white"
-                    android:textSize="16sp"
-                    app:backgroundTint="@color/title_color"
-                    app:cornerRadius="21dp"
-                    tools:ignore="ButtonStyle,VisualLintButtonSize" />
+                    android:layout_height="0dp"
+                    android:layout_marginBottom="16dp"
+                    android:layout_weight="1"
+                    app:cardCornerRadius="25dp"
+                    app:cardElevation="4dp"
+                    app:strokeWidth="0dp">
 
-            </com.google.android.material.card.MaterialCardView>
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnDungThue"
+                        android:layout_width="match_parent"
+                        android:layout_height="56dp"
+                        android:layout_margin="4dp"
+                        android:fontFamily="@font/sub_title_font"
+                        android:text="@string/ket_thuc_thue"
+                        android:textColor="@android:color/white"
+                        android:textSize="16sp"
+                        app:backgroundTint="@color/title_color"
+                        app:cornerRadius="21dp"
+                        tools:ignore="ButtonStyle,VisualLintButtonSize" />
+                </com.google.android.material.card.MaterialCardView>
+
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_marginBottom="16dp"
+                    android:layout_weight="1"
+                    app:cardCornerRadius="25dp"
+                    app:cardElevation="4dp"
+                    app:strokeWidth="0dp">
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnBatDauThue"
+                        android:layout_width="match_parent"
+                        android:layout_height="56dp"
+                        android:layout_margin="4dp"
+                        android:fontFamily="@font/sub_title_font"
+                        android:text="@string/thue_xe"
+                        android:textColor="@android:color/white"
+                        android:textSize="16sp"
+                        app:backgroundTint="@color/title_color"
+                        app:cornerRadius="21dp"
+                        tools:ignore="ButtonStyle,VisualLintButtonSize" />
+                </com.google.android.material.card.MaterialCardView>
+
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_marginBottom="16dp"
+                    android:layout_weight="1"
+                    app:cardCornerRadius="25dp"
+                    app:cardElevation="4dp"
+                    app:strokeWidth="0dp">
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnHuyThue"
+                        android:layout_width="match_parent"
+                        android:layout_height="56dp"
+                        android:layout_margin="4dp"
+                        android:fontFamily="@font/sub_title_font"
+                        android:text="@string/huy_thue"
+                        android:textColor="@android:color/white"
+                        android:textSize="16sp"
+                        app:backgroundTint="@color/title_color"
+                        app:cornerRadius="21dp"
+                        tools:ignore="ButtonStyle,VisualLintButtonSize" />
+                </com.google.android.material.card.MaterialCardView>
+
+            </LinearLayout>
+
 
         </LinearLayout>
     </ScrollView>
 
-    <!-- Empty state view -->
     <include
         android:id="@+id/emptyView"
         layout="@layout/fragement_user_rent_vehicle_empty"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="visible"/>
+        android:visibility="visible" />
 
 </FrameLayout>

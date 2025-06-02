@@ -58,9 +58,9 @@ import vn.zalopay.sdk.listeners.PayOrderListener;
  * @noinspection CallToPrintStackTrace
  */
 public class FragmentUserRentVehicle extends Fragment {
-    private TextView tvHoTen, tvCCCD, tvSDT, tvNgayDat, tvTenXe, tvTienCoc, tvNgayBatDauDK, tvNgayKetThucDK, tvNgayBatDauTT, tvNgayHienTai, tvThanhTien, tvThucTra, tvGhiChu, tvTrangThaiThanhToan, tvNoRentals, tvBienSo, tvLoaiXe, tvGiaThue;
+    private TextView tvHoTen, tvCCCD, tvSDT, tvNgayDat, tvTenXe, tvTienCoc, tvNgayBatDauDK, tvNgayKetThucDK, tvNgayBatDauTT, tvNgayHienTai, tvThanhTien, tvThucTra, tvGhiChu, tvTrangThaiThanhToan, tvBienSo, tvLoaiXe, tvGiaThue;
     private MaterialAutoCompleteTextView spinnerPhuongThuc;
-    private Button btnDungThue;
+    private Button btnDungThue, btnBatDauThue, btnHuyThue;
     private ThanhToanDAO thanhToanDAO;
     private Xe selectedXe;
     private XeDAO xeDAO;
@@ -84,7 +84,7 @@ public class FragmentUserRentVehicle extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d(TAG, "onCreate called");
-        
+
         Bundle args = getArguments();
         if (args != null) {
             boolean isFromHomepage = args.getBoolean("isFromHomepage", false);
@@ -93,7 +93,7 @@ public class FragmentUserRentVehicle extends Fragment {
         } else {
             Log.d(TAG, "onCreate: No arguments found");
         }
-        
+
         initData();
     }
 
@@ -102,24 +102,24 @@ public class FragmentUserRentVehicle extends Fragment {
         Log.d(TAG, "onCreateView called");
         View view = inflater.inflate(R.layout.fragement_user_rent_vehicle, container, false);
         initViews(view);
-        
+
         Bundle args = getArguments();
         if (args != null) {
             boolean isFromHomepage = args.getBoolean("isFromHomepage", false);
             Log.d(TAG, "onCreateView: isFromHomepage=" + isFromHomepage);
-            
+
             if (isFromHomepage) {
                 Xe xe = (Xe) args.getSerializable("xe");
                 Log.d(TAG, "onCreateView: Got xe object: " + (xe != null ? xe.getTenXe() : "null"));
-                
+
                 if (xe != null) {
                     View scrollViewRentalInfo = view.findViewById(R.id.scrollViewRentalInfo);
                     View emptyView = view.findViewById(R.id.emptyView);
                     View rentVehicleContainer = view.findViewById(R.id.user_rent_vehicle_container);
 
-                    Log.d(TAG, "Views found - scrollView: " + (scrollViewRentalInfo != null) + 
-                          ", emptyView: " + (emptyView != null) + 
-                          ", container: " + (rentVehicleContainer != null));
+                    Log.d(TAG, "Views found - scrollView: " + (scrollViewRentalInfo != null) +
+                            ", emptyView: " + (emptyView != null) +
+                            ", container: " + (rentVehicleContainer != null));
 
                     if (scrollViewRentalInfo != null) scrollViewRentalInfo.setVisibility(View.GONE);
                     if (emptyView != null) emptyView.setVisibility(View.GONE);
@@ -138,8 +138,8 @@ public class FragmentUserRentVehicle extends Fragment {
 
                     try {
                         getChildFragmentManager().beginTransaction()
-                            .replace(R.id.user_rent_vehicle_container, rentVehicleStartFragment)
-                            .commit();
+                                .replace(R.id.user_rent_vehicle_container, rentVehicleStartFragment)
+                                .commit();
                         Log.d(TAG, "Successfully added UserRentVehicleStart fragment");
                     } catch (Exception e) {
                         Log.e(TAG, "Error adding UserRentVehicleStart fragment", e);
@@ -149,7 +149,7 @@ public class FragmentUserRentVehicle extends Fragment {
         } else {
             Log.d(TAG, "onCreateView: No arguments found");
         }
-        
+
         return view;
     }
 
@@ -157,11 +157,11 @@ public class FragmentUserRentVehicle extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         Log.d(TAG, "onViewCreated called");
-        
+
         Bundle args = getArguments();
         boolean isFromHomepage = args != null && args.getBoolean("isFromHomepage", false);
         Log.d(TAG, "onViewCreated: isFromHomepage=" + isFromHomepage);
-        
+
         if (!isFromHomepage) {
             showEmptyView();
             loadLatestRentalInfo();
@@ -172,11 +172,11 @@ public class FragmentUserRentVehicle extends Fragment {
     public void onResume() {
         super.onResume();
         Log.d(TAG, "onResume called");
-        
+
         // Only load latest rental info if we're not coming from homepage
         Bundle args = getArguments();
         boolean isFromHomepage = args != null && args.getBoolean("isFromHomepage", false);
-        
+
         if (!isFromHomepage && currentUser != null) {
             loadLatestRentalInfo();
         }
@@ -203,6 +203,8 @@ public class FragmentUserRentVehicle extends Fragment {
             spinnerPhuongThuc = view.findViewById(R.id.spinnerPhuongThuc);
             tvGhiChu = view.findViewById(R.id.tvGhiChu);
             btnDungThue = view.findViewById(R.id.btnDungThue);
+            btnBatDauThue = view.findViewById(R.id.btnBatDauThue);
+            btnHuyThue = view.findViewById(R.id.btnHuyThue);
             scrollViewRentalInfo = view.findViewById(R.id.scrollViewRentalInfo);
             recyclerViewLichSuThue = view.findViewById(R.id.recyclerViewLichSuThue);
             emptyStateLayout = view.findViewById(R.id.emptyStateLayout);
@@ -233,6 +235,14 @@ public class FragmentUserRentVehicle extends Fragment {
 
                     setupButtonListeners();
                 }
+            });
+
+            btnHuyThue.setOnClickListener(v -> {
+
+            });
+
+            btnBatDauThue.setOnClickListener(v -> {
+
             });
         } catch (Exception e) {
             e.printStackTrace();
@@ -348,10 +358,10 @@ public class FragmentUserRentVehicle extends Fragment {
                                         String[] parts = ngayKetThucStr.split(" ")[0].split("-");
                                         if (parts.length == 3) {
                                             @SuppressLint("DefaultLocale") String reformattedDate = String.format("%s-%d-%d %s",
-                                                parts[0],
-                                                Integer.parseInt(parts[1]),
-                                                Integer.parseInt(parts[2]),
-                                                ngayKetThucStr.contains(" ") ? ngayKetThucStr.split(" ")[1] : "00:00");
+                                                    parts[0],
+                                                    Integer.parseInt(parts[1]),
+                                                    Integer.parseInt(parts[2]),
+                                                    ngayKetThucStr.contains(" ") ? ngayKetThucStr.split(" ")[1] : "00:00");
                                             ngayKetThuc = inputDateFormat.parse(reformattedDate);
                                         }
                                     } catch (Exception e2) {
@@ -437,8 +447,8 @@ public class FragmentUserRentVehicle extends Fragment {
         Fragment existingFragment = getChildFragmentManager().findFragmentById(R.id.user_rent_vehicle_container);
         if (existingFragment != null) {
             getChildFragmentManager().beginTransaction()
-                .remove(existingFragment)
-                .commitNow(); // Use commitNow to ensure immediate execution
+                    .remove(existingFragment)
+                    .commitNow(); // Use commitNow to ensure immediate execution
         }
 
         // Show only the rental info view
@@ -463,7 +473,7 @@ public class FragmentUserRentVehicle extends Fragment {
         if (scrollViewRentalInfo != null) scrollViewRentalInfo.setVisibility(View.GONE);
         if (emptyView != null) emptyView.setVisibility(View.VISIBLE);
         if (rentVehicleContainer != null) rentVehicleContainer.setVisibility(View.GONE);
-        
+
         Log.d(TAG, "showEmptyView: Updated view visibilities");
     }
 
@@ -604,18 +614,18 @@ public class FragmentUserRentVehicle extends Fragment {
             }
             // Loại bỏ tất cả ký tự không phải số, dấu chấm và khoảng trắng
             String cleanStr = currencyStr.replaceAll("[^0-9.,\\s]", "").trim();
-            
+
             // Loại bỏ dấu chấm phân cách hàng nghìn và khoảng trắng
             cleanStr = cleanStr.replaceAll("[\\s.]", "");
-            
+
             // Thay thế dấu phẩy bằng dấu chấm (nếu có)
             cleanStr = cleanStr.replace(",", ".");
-            
+
             // Nếu có dấu chấm thập phân, lấy phần nguyên
             if (cleanStr.contains(".")) {
                 cleanStr = cleanStr.substring(0, cleanStr.indexOf("."));
             }
-            
+
             return Integer.parseInt(cleanStr);
         } catch (Exception e) {
             Log.e("Currency", "Error parsing currency string: " + currencyStr, e);
@@ -736,14 +746,14 @@ public class FragmentUserRentVehicle extends Fragment {
 
                     // Thực hiện chuyển fragment
                     getChildFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.user_rent_vehicle_container, paymentNotiFragment)
-                        .addToBackStack(null)
-                        .commit();
+                            .beginTransaction()
+                            .replace(R.id.user_rent_vehicle_container, paymentNotiFragment)
+                            .addToBackStack(null)
+                            .commit();
 
-                    Toast.makeText(requireContext(), 
-                        "Đã tạo yêu cầu dừng thuê xe thành công", 
-                        Toast.LENGTH_SHORT).show();
+                    Toast.makeText(requireContext(),
+                            "Đã tạo yêu cầu dừng thuê xe thành công",
+                            Toast.LENGTH_SHORT).show();
 
                 } catch (Exception e) {
                     Log.e("StopRental", "Error in navigation: " + e.getMessage());
@@ -805,10 +815,10 @@ public class FragmentUserRentVehicle extends Fragment {
             // Parse các giá trị tiền tệ
             int thanhTien = parseCurrencyString(tvThanhTien.getText().toString());
             int tienCoc = parseCurrencyString(tvTienCoc.getText().toString());
-            
+
             Log.d("Payment", "Parsed thanhTien: " + thanhTien);
             Log.d("Payment", "Parsed tienCoc: " + tienCoc);
-            
+
             if (thanhTien <= 0) {
                 Toast.makeText(requireContext(), "Số tiền thanh toán không hợp lệ", Toast.LENGTH_SHORT).show();
                 return;
@@ -906,11 +916,11 @@ public class FragmentUserRentVehicle extends Fragment {
             int thanhTien = parseCurrencyString(tvThanhTien.getText().toString());
             int tienCoc = parseCurrencyString(tvTienCoc.getText().toString());
             int finalAmount = thanhTien - tienCoc;
-            
+
             Log.d("ZaloPay", "Parsed thanhTien: " + thanhTien);
             Log.d("ZaloPay", "Parsed tienCoc: " + tienCoc);
             Log.d("ZaloPay", "Final amount: " + finalAmount);
-            
+
             if (thanhTien <= 0) {
                 Toast.makeText(requireContext(), "Số tiền thanh toán không hợp lệ", Toast.LENGTH_SHORT).show();
                 return;
@@ -931,7 +941,7 @@ public class FragmentUserRentVehicle extends Fragment {
             Log.d("ZaloPay", "Amount to pay: " + finalAmount);
             Log.d("ZaloPay", "APP_ID: " + AppInfo.APP_ID);
             Log.d("ZaloPay", "MAC_KEY: " + AppInfo.MAC_KEY);
-            
+
             JSONObject data = orderApi.createOrder(String.valueOf(finalAmount));
             Log.d("ZaloPay", "Response data: " + (data != null ? data.toString() : "null"));
 
@@ -1177,7 +1187,7 @@ public class FragmentUserRentVehicle extends Fragment {
         if (recyclerViewLichSuThue != null) {
             recyclerViewLichSuThue.setVisibility(View.GONE);
         }
-        
+
         // Ẩn layout trạng thái trống nếu đang hiển thị
         if (emptyStateLayout != null) {
             emptyStateLayout.setVisibility(View.GONE);
@@ -1224,16 +1234,18 @@ public class FragmentUserRentVehicle extends Fragment {
             if (tvTenXe != null) tvTenXe.setText(xe.getTenXe());
             if (tvBienSo != null) tvBienSo.setText(xe.getBienSo());
             if (tvLoaiXe != null) tvLoaiXe.setText(xe.getLoaiXe());
-            
+
             // Cập nhật thông tin thuê xe
             if (tvNgayDat != null) tvNgayDat.setText(thueXe.getNgayDat());
             if (tvNgayBatDauDK != null) tvNgayBatDauDK.setText(chiTiet.getNgayBatDauDK());
             if (tvNgayKetThucDK != null) tvNgayKetThucDK.setText(chiTiet.getNgayKetThucDK());
-            
+
             // Cập nhật thông tin thanh toán
-            if (tvTienCoc != null) tvTienCoc.setText(String.format("%,d VNĐ", chiTiet.getTienCoc()));
-            if (tvThanhTien != null) tvThanhTien.setText(String.format("%,d VNĐ", chiTiet.getThanhTien()));
-            
+            if (tvTienCoc != null)
+                tvTienCoc.setText(String.format("%,d VNĐ", chiTiet.getTienCoc()));
+            if (tvThanhTien != null)
+                tvThanhTien.setText(String.format("%,d VNĐ", chiTiet.getThanhTien()));
+
             // Cập nhật trạng thái
             if (tvTrangThaiThanhToan != null) {
                 String trangThai;

@@ -1,5 +1,6 @@
 package com.example.afinal.Interfaces.User.Transaction.Action;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -21,8 +22,8 @@ import com.example.afinal.Database.Model.ThanhToan;
 import com.example.afinal.Database.Model.Xe;
 import com.example.afinal.Interfaces.User.RentVehicle.FragmentUserRentVehicle;
 import com.example.afinal.R;
-import com.example.afinal.Interfaces.User.RentVehicle.UserRentVehicleStart;
 
+/** @noinspection CallToPrintStackTrace*/
 public class PaymentNotification extends Fragment {
     private TextView tvResult, tvSubMessage;
     private Button btnTrangChu, btnThongTinThueXe, btnThongTinGiaoDich;
@@ -102,6 +103,7 @@ public class PaymentNotification extends Fragment {
         });
     }
 
+    @SuppressLint("SetTextI18n")
     private void initViews(View view) {
         try {
             tvResult = view.findViewById(R.id.tvThanhToanThanhCong);
@@ -203,6 +205,7 @@ public class PaymentNotification extends Fragment {
         }
     }
 
+    @SuppressLint("SetTextI18n")
     private void checkPaymentStatus() {
         try {
             ThanhToan thanhToan = thanhToanDAO.getByMaThueXe(maThueXe);
@@ -240,10 +243,6 @@ public class PaymentNotification extends Fragment {
                 }
 
                 FragmentManager parentFragmentManager = getParentFragmentManager();
-                if (parentFragmentManager == null) {
-                    Log.e("PaymentNotification", "Parent FragmentManager is null");
-                    return;
-                }
 
                 Fragment parentFragment = getParentFragment();
                 if (!(parentFragment instanceof FragmentUserRentVehicle)) {
@@ -261,10 +260,6 @@ public class PaymentNotification extends Fragment {
 
                 // Xóa các fragment con trong FragmentUserRentVehicle
                 FragmentManager childFragmentManager = rentVehicleFragment.getChildFragmentManager();
-                if (childFragmentManager == null) {
-                    Log.e("PaymentNotification", "Child FragmentManager is null");
-                    return;
-                }
                 childFragmentManager.popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
 
                 View rentVehicleView = rentVehicleFragment.getView();
@@ -303,9 +298,7 @@ public class PaymentNotification extends Fragment {
 
                 // Xóa fragment notification hiện tại
                 FragmentManager parentFragmentManager = getParentFragmentManager();
-                if (parentFragmentManager != null) {
-                    parentFragmentManager.popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                }
+                parentFragmentManager.popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
                 if (getView() != null) {
                     getView().setVisibility(View.GONE);
                 }

@@ -148,6 +148,7 @@
     <string name="thong_ke_giao_dich">Thống kê giao dịch</string>
     <string name="thoi_gian_thue">Thời gian thuê</string>
     <string name="thong_tin_thanh_toan">Thông tin thanh toán</string>
+    <string name="thong_tin_thanh_toan_coc">Thông tin thanh toán cọc</string>
 
     <!-- Loại xe -->
     <string-array name="loai_xe">
