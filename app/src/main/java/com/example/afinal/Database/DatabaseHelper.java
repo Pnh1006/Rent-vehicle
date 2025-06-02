@@ -106,7 +106,72 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         for (int i = 0; i < 10; i++) {
             String gioiTinh = i % 3 == 0 ? "Nam" : (i % 3 == 1 ? "Nữ" : "Khác");
             int vaiTro = i == 0 ? 1 : 0; // Admin cho user đầu tiên
-            int trangThai = i % 5 != 0 ? 0 : 1; // Khóa một số tài khoản
+            int trangThai = i % 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    != 0 ? 0 : 1; // Khóa một số tài khoản
 
             db.execSQL("INSERT INTO NGUOIDUNG (HoTen, SDT, MatKhau, CCCD, NgaySinh, GioiTinh, NgayDangKy, VaiTro, TrangThai) " +
                             "VALUES (?, ?, ?, ?, '2000-01-01', ?, '2024-01-01', ?, ?)",

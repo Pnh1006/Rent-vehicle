@@ -38,7 +38,8 @@
     <string name="doi_mat_khau">Đổi mật khẩu</string>
     <string name="thong_bao_doi_mat_khau">Vui lòng nhập thông tin để đổi mật khẩu</string>
     <string name="chon_anh_tu_thiet_bi">Chọn ảnh từ thiết bị</string>
-    <string name="khong_thue_xe">Bạn hiện đang không thuê xe nào.</string>
+    <string name="khong_thue_xe">Bạn chưa có xe nào đang thuê</string>
+    <string name="khong_co_thue_xe">Không có thông tin thuê xe</string>
     <string name="lich_su_thue_xe">Lịch sử thuê xe</string>
     <string name="thanh_toan_thue_xe">Thanh toán thuê xe</string>
     <string name="quay_ve_trang_chu">Quay về trang chủ</string>
@@ -93,7 +94,6 @@
     <string name="ma_thue_xe_thanhtoan">Mã thuê xe</string>
     <string name="ma_nd_thanhtoan">Mã người dùng</string>
     <string name="so_tien">Số tiền</string>
-    <string name="thong_tin_thanh_toan">Thông Tin Thanh Toán</string>
     <string name="chi_tiet_thanh_toan">Chi Tiết Thanh Toán</string>
     <string name="thoi_gian_trang_thai">Thời Gian - Trạng Thái</string>
     <string name="noi_dung_thanhtoan">Nội dung thanh toán</string>
@@ -120,6 +120,7 @@
     <string name="form_xe">Form xe</string>
     <string name="form_giao_dich">Form giao dịch</string>
     <string name="trang_chu">Trang chủ</string>
+    <string name="thanh_toan">Thanh toán</string>
     <string name="thue_xe">Thuê xe</string>
     <string name="lich_su">Lịch sử</string>
     <string name="cai_dat">Cài đặt</string>
@@ -131,7 +132,7 @@
     <string name="quan_ly_tai_khoan">Quản lý tài khoản</string>
     <string name="tim_kiem_tai_khoan">Tìm kiếm tài khoản</string>
     <string name="khong_tim_thay_xe">Không tìm thấy xe phù hợp</string>
-    <string name="danh_sach_tai_khoan">Danh sách tài khoản"</string>
+    <string name="danh_sach_tai_khoan">Danh sách tài khoản</string>
     <string name="quan_ly_giao_dich">Quản lý giao dịch</string>
     <string name="quan_ly_xe">Quản lý xe</string>
     <string name="quan_ly_thue_xe">Quản lý thuê xe</string>
@@ -145,6 +146,8 @@
     <string name="thanh_cong">Thành công</string>
     <string name="tong_so">Tổng số</string>
     <string name="thong_ke_giao_dich">Thống kê giao dịch</string>
+    <string name="thoi_gian_thue">Thời gian thuê</string>
+    <string name="thong_tin_thanh_toan">Thông tin thanh toán</string>
 
     <!-- Loại xe -->
     <string-array name="loai_xe">

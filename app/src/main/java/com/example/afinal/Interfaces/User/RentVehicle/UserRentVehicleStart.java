@@ -14,7 +14,6 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,7 +34,7 @@ import com.example.afinal.Database.Model.ThueXe;
 import com.example.afinal.Database.Model.ChiTietThueXe;
 import com.example.afinal.Database.Utilites.NguoiDungUtility;
 import com.example.afinal.Database.Utilites.ThueXeUtility;
-import com.example.afinal.Interfaces.User.Transaction.Action.PaymentNoti;
+import com.example.afinal.Interfaces.User.Transaction.Action.PaymentNotification;
 import com.example.afinal.Interfaces.User.Transaction.Api.CreateOrder;
 import com.example.afinal.Interfaces.User.Transaction.Constant.AppInfo;
 import com.example.afinal.R;
@@ -52,17 +51,19 @@ import vn.zalopay.sdk.ZaloPayError;
 import vn.zalopay.sdk.ZaloPaySDK;
 import vn.zalopay.sdk.listeners.PayOrderListener;
 
-/** @noinspection CallToPrintStackTrace*/
+/**
+ * @noinspection CallToPrintStackTrace
+ */
 public class UserRentVehicleStart extends Fragment {
-    private TextView tvHoTen, tvCCCD, tvSDT, tvNgayDat, tvTenXe, tvTienCoc, tvThanhTien, tvGiaThue;
+    private TextView tvTenXe, tvTienCoc, tvThanhTien, tvGiaThue;
     private EditText edNgayBatDauDK, edNgayKetThucDK, edGhiChu;
-    private Spinner spinnerPhuongThuc;
+    private AutoCompleteTextView spinnerPhuongThuc;
     private Button btnThanhToan, btnQuayVe;
     private Xe selectedXe;
     private NguoiDung currentUser;
-    private Calendar calendar = Calendar.getInstance();
-    private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-    private SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
+    private final Calendar calendar = Calendar.getInstance();
+    private final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+    private final SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
     private NguoiDungUtility nguoiDungUtility;
     private ThanhToanDAO thanhToanDAO;
     private ThueXeDAO thueXeDAO;
@@ -74,7 +75,7 @@ public class UserRentVehicleStart extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragement_user_rent_vehicle_start, container, false);
+        return inflater.inflate(R.layout.form_user_rent_vehicle, container, false);
     }
 
     @Override
@@ -99,19 +100,16 @@ public class UserRentVehicleStart extends Fragment {
 
         setupDatePickers();
 
-        // Setup payment method spinner
         setupPaymentMethodSpinner();
 
-        // Setup button click listeners
         setupButtonListeners();
     }
 
     private void initViews(View view) {
-        // Initialize all views
-        tvHoTen = view.findViewById(R.id.tvHoTen);
-        tvCCCD = view.findViewById(R.id.tvCCCD);
-        tvSDT = view.findViewById(R.id.tvSDT);
-        tvNgayDat = view.findViewById(R.id.tvNgayDat);
+        TextView tvHoTen = view.findViewById(R.id.tvHoTen);
+        TextView tvCCCD = view.findViewById(R.id.tvCCCD);
+        TextView tvSDT = view.findViewById(R.id.tvSDT);
+        TextView tvNgayDat = view.findViewById(R.id.tvNgayDat);
         tvTenXe = view.findViewById(R.id.tvTenXe);
         tvTienCoc = view.findViewById(R.id.tvTienCoc);
         tvThanhTien = view.findViewById(R.id.tvThanhTien);
@@ -123,10 +121,8 @@ public class UserRentVehicleStart extends Fragment {
         btnThanhToan = view.findViewById(R.id.btnThanhToan);
         btnQuayVe = view.findViewById(R.id.btnQuayVe);
 
-        // Get and display current user info
         currentUser = nguoiDungUtility.getCurrentUser();
         if (currentUser != null) {
-            // Display user information
             tvHoTen.setText(currentUser.getHoTen());
             tvCCCD.setText(currentUser.getCccd());
             tvSDT.setText(currentUser.getSdt());
@@ -134,17 +130,14 @@ public class UserRentVehicleStart extends Fragment {
             Toast.makeText(requireContext(), "Không thể lấy thông tin người dùng", Toast.LENGTH_SHORT).show();
         }
 
-        // Set current date
         tvNgayDat.setText(dateFormat.format(new Date()));
     }
 
     @SuppressLint("DefaultLocale")
     private void displayVehicleInfo() {
         tvTenXe.setText(selectedXe.getTenXe());
-        // Display rental price
         tvGiaThue.setText(String.format("%,d VNĐ/ngày", selectedXe.getGiaThue()));
-        // Calculate deposit (30% of daily rate)
-        tienCoc = (int) (selectedXe.getGiaThue() * 0.3);
+        tienCoc = selectedXe.getGiaThue();
         tvTienCoc.setText(String.format("%,d VNĐ", tienCoc));
     }
 
@@ -154,7 +147,6 @@ public class UserRentVehicleStart extends Fragment {
     }
 
     private void showDatePicker(final EditText editText) {
-        // Set minimum date to today
         Calendar minDate = Calendar.getInstance();
         minDate.set(Calendar.HOUR_OF_DAY, 0);
         minDate.set(Calendar.MINUTE, 0);
@@ -166,14 +158,12 @@ public class UserRentVehicleStart extends Fragment {
             calendar.set(Calendar.MONTH, month);
             calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
 
-            // Check if selected date is before today
             if (calendar.getTimeInMillis() < minDate.getTimeInMillis()) {
                 Toast.makeText(requireContext(), "Ngày không được nhỏ hơn ngày hiện tại",
                         Toast.LENGTH_SHORT).show();
                 return;
             }
 
-            // If this is end date, check if it's after start date
             if (editText == edNgayKetThucDK && !edNgayBatDauDK.getText().toString().isEmpty()) {
                 try {
                     Date startDate = dateFormat.parse(edNgayBatDauDK.getText().toString());
@@ -187,7 +177,6 @@ public class UserRentVehicleStart extends Fragment {
                 }
             }
 
-            // Show time picker after date is selected
             showTimePicker(editText);
         };
 
@@ -199,7 +188,6 @@ public class UserRentVehicleStart extends Fragment {
                 calendar.get(Calendar.DAY_OF_MONTH)
         );
 
-        // Set minimum date to today
         datePickerDialog.getDatePicker().setMinDate(minDate.getTimeInMillis());
         datePickerDialog.show();
     }
@@ -209,7 +197,6 @@ public class UserRentVehicleStart extends Fragment {
             calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
             calendar.set(Calendar.MINUTE, minute);
 
-            // If this is today, check if selected time is in the future
             Calendar now = Calendar.getInstance();
             if (calendar.get(Calendar.YEAR) == now.get(Calendar.YEAR) &&
                     calendar.get(Calendar.MONTH) == now.get(Calendar.MONTH) &&
@@ -222,7 +209,6 @@ public class UserRentVehicleStart extends Fragment {
                 }
             }
 
-            // If this is end date, check if it's after start date and time
             if (editText == edNgayKetThucDK && !edNgayBatDauDK.getText().toString().isEmpty()) {
                 try {
                     String startDateTime = edNgayBatDauDK.getText().toString();
@@ -264,14 +250,19 @@ public class UserRentVehicleStart extends Fragment {
         try {
             String startDate = edNgayBatDauDK.getText().toString();
             String endDate = edNgayKetThucDK.getText().toString();
-            
+
             if (!startDate.isEmpty() && !endDate.isEmpty()) {
                 Date start = dateFormat.parse(startDate);
                 Date end = dateFormat.parse(endDate);
-                
-                long diffInMillis = end.getTime() - start.getTime();
+
+                long diffInMillis = 0;
+                if (start != null) {
+                    if (end != null) {
+                        diffInMillis = end.getTime() - start.getTime();
+                    }
+                }
                 int days = (int) (diffInMillis / (24 * 60 * 60 * 1000));
-                
+
                 if (days > 0) {
                     totalAmount = selectedXe.getGiaThue() * days;
                     tvThanhTien.setText(String.format("%,d VNĐ", totalAmount));
@@ -286,14 +277,12 @@ public class UserRentVehicleStart extends Fragment {
     }
 
     private void setupPaymentMethodSpinner() {
-        // Get payment methods from resources
         String[] paymentMethods = getResources().getStringArray(R.array.phuong_thuc_thanh_toan);
         ArrayAdapter<String> adapter = new ArrayAdapter<>(
                 requireContext(),
-                android.R.layout.simple_spinner_item,
+                android.R.layout.simple_dropdown_item_1line,
                 paymentMethods
         );
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerPhuongThuc.setAdapter(adapter);
     }
 
@@ -301,34 +290,29 @@ public class UserRentVehicleStart extends Fragment {
         try {
             ThanhToan thanhToan = new ThanhToan();
             thanhToan.setMaND(currentUser.getMaND());
-            thanhToan.setMaThueXe(0); // Will be updated when rental is created
+            thanhToan.setMaThueXe(0);
             thanhToan.setSoTien(Integer.parseInt(amount.replaceAll("[^0-9]", "")));
             thanhToan.setNoiDung("Thanh toán tiền thuê xe");
             thanhToan.setNgayThucHien(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(new Date()));
-            thanhToan.setNgayThanhCong(status.equals("Thanh toán thành công") ? 
-                new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(new Date()) : null);
+            thanhToan.setNgayThanhCong(status.equals("Đã thanh toán") ?
+                    new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(new Date()) : null);
             thanhToan.setPhuongThuc(paymentMethod);
             thanhToan.setMaGiaoDich(transactionId != null ? transactionId : appTransId);
             thanhToan.setGhiChu(edGhiChu.getText().toString().trim());
-            
-            // Map status to match string array values
+
             int trangThai;
             switch (status) {
-                case "Thanh toán thành công":
-                    trangThai = 0; // "Đã thanh toán"
-
+                case "Đã thanh toán":
+                    trangThai = 0;
                     break;
-                case "Hủy thanh toán":
-                    trangThai = 1; // "Chưa thanh toán"
-
+                case "Chưa thanh toán":
+                    trangThai = 1;
                     break;
-                case "Lỗi thanh toán":
-                    trangThai = 3; // "Thất bại"
-
+                case "Thất bại":
+                    trangThai = 3;
                     break;
                 default:
                     trangThai = 2; // "Đang xử lý"
-
                     break;
             }
             thanhToan.setTrangThai(trangThai);
@@ -350,7 +334,6 @@ public class UserRentVehicleStart extends Fragment {
         // ZaloPay SDK Init
         ZaloPaySDK.init(553, Environment.SANDBOX);
 
-        // Handle "Thanh toán tiền cọc" button click
         btnThanhToan.setOnClickListener(v -> {
             if (edNgayBatDauDK.getText().toString().isEmpty() || edNgayKetThucDK.getText().toString().isEmpty()) {
                 Toast.makeText(requireContext(), "Vui lòng chọn ngày bắt đầu và kết thúc",
@@ -358,183 +341,23 @@ public class UserRentVehicleStart extends Fragment {
                 return;
             }
 
-            String paymentMethod = spinnerPhuongThuc.getSelectedItem().toString();
+            String amountText = tvThanhTien.getText().toString().replaceAll("[^0-9]", "");
+            if (amountText.isEmpty()) {
+                Toast.makeText(requireContext(), "Số tiền không hợp lệ", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            int amount = Integer.parseInt(amountText);
+            if (amount < 1000) {
+                Toast.makeText(requireContext(), "Số tiền tối thiểu là 1,000 VNĐ", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            String paymentMethod = spinnerPhuongThuc.getText().toString();
             if (paymentMethod.equals("Tiền mặt")) {
-                // Navigate to payment screen
-                UserPayStart payStartFragment = new UserPayStart();
-
-                // Pass necessary data to payment fragment
-                Bundle bundle = new Bundle();
-                bundle.putSerializable("xe", selectedXe);
-                bundle.putString("ngayBatDau", edNgayBatDauDK.getText().toString());
-                bundle.putString("ngayKetThuc", edNgayKetThucDK.getText().toString());
-                bundle.putString("ghiChu", edGhiChu.getText().toString().trim());
-                payStartFragment.setArguments(bundle);
-
-                // Navigate to payment fragment
-                FragmentTransaction transaction = requireActivity().getSupportFragmentManager().beginTransaction();
-                transaction.replace(R.id.user_rent_vehicle_container, payStartFragment);
-                transaction.addToBackStack(null);
-                transaction.commit();
+                handleCashPayment();
             } else {
-                CreateOrder orderApi = new CreateOrder();
-                try {
-                    String amountText = tvThanhTien.getText().toString().replaceAll("[^0-9]", "");
-                    if (amountText.isEmpty()) {
-                        Toast.makeText(requireContext(), "Số tiền không hợp lệ", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-                    
-                    int amount = Integer.parseInt(amountText);
-                    if (amount < 1000) {
-                        Toast.makeText(requireContext(), "Số tiền tối thiểu là 1,000 VNĐ", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-                    
-                    Log.d("ZaloPay", "Amount to pay: " + amount);
-                    Log.d("ZaloPay", "APP_ID: " + AppInfo.APP_ID);
-                    Log.d("ZaloPay", "MAC_KEY: " + AppInfo.MAC_KEY);
-                    JSONObject data = orderApi.createOrder(String.valueOf(amount));
-                    Log.d("ZaloPay", "Response data: " + (data != null ? data.toString() : "null"));
-                    
-                    if (data != null) {
-                        if (data.has("returncode")) {
-                            int code = data.getInt("returncode");
-                            Log.d("ZaloPay", "Return code: " + code);
-                            
-                            String errorMessage = "Lỗi không xác định"; // Default error message
-                            switch (code) {
-                                case 1:
-                                    if (data.has("zptranstoken")) {
-                                        String token = data.getString("zptranstoken");
-                                        Log.d("ZaloPay", "Token: " + token);
-                                        ZaloPaySDK.getInstance().payOrder(requireActivity(), token, "demozpdk://app", new PayOrderListener() {
-                                            @Override
-                                            public void onPaymentSucceeded(String transactionId, String transToken, String appTransId) {
-                                                Log.d("ZaloPay", "Payment succeeded - transactionId: " + transactionId);
-                                                
-                                                // Save successful payment transaction
-                                                String amount = tvThanhTien.getText().toString();
-                                                String paymentMethod = spinnerPhuongThuc.getSelectedItem().toString();
-                                                savePaymentTransaction(amount, paymentMethod, "Thanh toán thành công", transactionId, appTransId);
-                                                
-                                                // Tạo đơn thuê xe
-                                                ThueXe thueXe = new ThueXe();
-                                                thueXe.setMaND(currentUser.getMaND());
-                                                thueXe.setNgayDat(ThueXeUtility.getCurrentDate());
-                                                thueXe.setTrangThai(0); // Đang thuê
-
-                                                long maThueXe = thueXeDAO.insert(thueXe);
-                                                if (maThueXe > 0) {
-                                                    // Tạo chi tiết thuê xe
-                                                    ChiTietThueXe chiTiet = new ChiTietThueXe();
-                                                    chiTiet.setMaThueXe((int) maThueXe);
-                                                    chiTiet.setMaXe(selectedXe.getMaXe());
-                                                    chiTiet.setNgayBatDauDK(edNgayBatDauDK.getText().toString());
-                                                    chiTiet.setNgayKetThucDK(edNgayKetThucDK.getText().toString());
-                                                    chiTiet.setNgayBatDauTT(edNgayBatDauDK.getText().toString());
-                                                    chiTiet.setNgayKetThucTT(edNgayKetThucDK.getText().toString());
-                                                    chiTiet.setTienCoc(tienCoc);
-                                                    chiTiet.setThanhTien(totalAmount);
-                                                    chiTiet.setGhiChu("Thanh toán qua ZaloPay");
-
-                                                    long result = chiTietThueXeDAO.insert(chiTiet);
-                                                    if (result > 0) {
-                                                        // Cập nhật trạng thái xe
-                                                        xeDAO.updateStatus(selectedXe.getMaXe(), 1); // Đang được thuê
-                                                    }
-                                                }
-                                                
-                                                // Create and show PaymentNoti fragment
-                                                PaymentNoti paymentNotiFragment = new PaymentNoti();
-                                                Bundle bundle = new Bundle();
-                                                bundle.putString("result", "Thanh toán thành công");
-                                                bundle.putString("transactionId", transactionId);
-                                                bundle.putString("appTransId", appTransId);
-                                                paymentNotiFragment.setArguments(bundle);
-
-                                                FragmentTransaction transaction = requireActivity().getSupportFragmentManager().beginTransaction();
-                                                transaction.replace(R.id.user_rent_vehicle_container, paymentNotiFragment);
-                                                transaction.addToBackStack(null);
-                                                transaction.commit();
-                                            }
-
-                                            @Override
-                                            public void onPaymentCanceled(String zpTransToken, String appTransId) {
-                                                Log.d("ZaloPay", "Payment canceled - zpTransToken: " + zpTransToken);
-                                                
-                                                // Save cancelled payment transaction
-                                                String amount = tvThanhTien.getText().toString();
-                                                String paymentMethod = spinnerPhuongThuc.getSelectedItem().toString();
-                                                savePaymentTransaction(amount, paymentMethod, "Hủy thanh toán", null, null);
-                                                
-                                                // Create and show PaymentNoti fragment with error
-                                                PaymentNoti paymentNotiFragment = new PaymentNoti();
-                                                Bundle bundle = new Bundle();
-                                                bundle.putString("result", "Hủy thanh toán");
-                                                paymentNotiFragment.setArguments(bundle);
-
-                                                // Add fragment on top of current screen
-                                                FragmentTransaction transaction = requireActivity().getSupportFragmentManager().beginTransaction();
-                                                transaction.replace(R.id.user_rent_vehicle_container, paymentNotiFragment);
-                                                transaction.addToBackStack(null);
-                                                transaction.commit();
-                                            }
-
-                                            @Override
-                                            public void onPaymentError(ZaloPayError zaloPayError, String zpTransToken, String appTransId) {
-                                                Log.d("ZaloPay", "Payment error - " + zaloPayError.toString());
-                                                
-                                                // Save failed payment transaction
-                                                String amount = tvThanhTien.getText().toString();
-                                                String paymentMethod = spinnerPhuongThuc.getSelectedItem().toString();
-                                                savePaymentTransaction(amount, paymentMethod, "Lỗi thanh toán", null, null);
-                                                
-                                                // Create and show PaymentNoti fragment with error
-                                                PaymentNoti paymentNotiFragment = new PaymentNoti();
-                                                Bundle bundle = new Bundle();
-                                                bundle.putString("result", "Lỗi thanh toán: " + zaloPayError);
-                                                paymentNotiFragment.setArguments(bundle);
-
-                                                // Add fragment on top of current screen
-                                                FragmentTransaction transaction = requireActivity().getSupportFragmentManager().beginTransaction();
-                                                transaction.replace(R.id.user_rent_vehicle_container, paymentNotiFragment);
-                                                transaction.addToBackStack(null);
-                                                transaction.commit();
-                                            }
-                                        });
-                                    } else {
-                                        Toast.makeText(requireContext(), "Không nhận được token thanh toán", Toast.LENGTH_SHORT).show();
-                                    }
-                                    break;
-                                case -2:
-                                    errorMessage = "Lỗi xác thực. Vui lòng kiểm tra lại thông tin thanh toán.";
-                                    break;
-                                case -3:
-                                    errorMessage = "Lỗi kết nối. Vui lòng thử lại sau.";
-                                    break;
-                                case -4:
-                                    errorMessage = "Lỗi dữ liệu. Vui lòng kiểm tra lại thông tin.";
-                                    break;
-                                default:
-                                    errorMessage = data.has("returnmessage") && !data.getString("returnmessage").isEmpty() 
-                                        ? data.getString("returnmessage") 
-                                        : "Lỗi không xác định. Mã lỗi: " + code;
-                            }
-                            
-                            if (code != 1) {
-                                Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_LONG).show();
-                            }
-                        } else {
-                            Toast.makeText(requireContext(), "Không nhận được mã phản hồi từ ZaloPay", Toast.LENGTH_SHORT).show();
-                        }
-                    } else {
-                        Toast.makeText(requireContext(), "Không thể kết nối với ZaloPay", Toast.LENGTH_SHORT).show();
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    Toast.makeText(requireContext(), "Lỗi: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                }
+                handleZaloPayment();
             }
         });
 
@@ -549,8 +372,8 @@ public class UserRentVehicleStart extends Fragment {
             // Show homepage elements
             TextView tvWelcome = requireActivity().findViewById(R.id.tv_welcome);
             AutoCompleteTextView tvSearch = requireActivity().findViewById(R.id.tv_search);
-            Spinner spinnerVehicleType = requireActivity().findViewById(R.id.spinner_vehicle_type);
-            Spinner spinnerStatus = requireActivity().findViewById(R.id.spinner_status);
+            AutoCompleteTextView spinnerVehicleType = requireActivity().findViewById(R.id.spinner_vehicle_type);
+            AutoCompleteTextView spinnerStatus = requireActivity().findViewById(R.id.spinner_status);
             Button btnClearFilter = requireActivity().findViewById(R.id.btn_clear_filter);
             RecyclerView recyclerView = requireActivity().findViewById(R.id.vehicle_list);
 
@@ -563,36 +386,285 @@ public class UserRentVehicleStart extends Fragment {
         });
     }
 
+    private void handleCashPayment() {
+        try {
+            // Save payment transaction
+            long appTransId = System.currentTimeMillis();
+            Log.d("Cash", "Saving payment transaction - amount: " + totalAmount + ", method: Tiền mặt");
+            savePaymentTransaction(String.valueOf(totalAmount), "Tiền mặt", "Đang xử lý", String.valueOf(appTransId), String.valueOf(appTransId));
+
+            ThueXe thueXe = new ThueXe();
+            thueXe.setMaND(currentUser.getMaND());
+            thueXe.setNgayDat(ThueXeUtility.getCurrentDate());
+            thueXe.setTrangThai(0); // Đang thuê
+
+            Log.d("Cash", "Creating rental record for user: " + currentUser.getMaND());
+            long maThueXe = thueXeDAO.insert(thueXe);
+            Log.d("Cash", "Rental record created with maThueXe: " + maThueXe);
+
+            if (maThueXe > 0) {
+                ChiTietThueXe chiTiet = new ChiTietThueXe();
+                chiTiet.setMaThueXe((int) maThueXe);
+                chiTiet.setMaXe(selectedXe.getMaXe());
+                chiTiet.setNgayBatDauDK(edNgayBatDauDK.getText().toString());
+                chiTiet.setNgayKetThucDK(edNgayKetThucDK.getText().toString());
+                chiTiet.setNgayBatDauTT(edNgayKetThucDK.getText().toString());
+                chiTiet.setNgayKetThucTT("");
+                chiTiet.setTienCoc(tienCoc);
+                chiTiet.setThanhTien(totalAmount);
+                chiTiet.setGhiChu("Thanh toán qua tiền mặt");
+
+                Log.d("Cash", "Creating rental details for maThueXe: " + maThueXe);
+                long result = chiTietThueXeDAO.insert(chiTiet);
+                Log.d("Cash", "Rental details created with result: " + result);
+
+                if (result > 0) {
+                    Log.d("Cash", "Updating vehicle status for maXe: " + selectedXe.getMaXe());
+                    xeDAO.updateStatus(selectedXe.getMaXe(), 1);
+
+                    Log.d("Cash", "Updating payment record with maThueXe: " + maThueXe);
+                    ThanhToan payment = thanhToanDAO.getByMaGiaoDich(String.valueOf(appTransId));
+                    if (payment != null) {
+                        payment.setMaThueXe((int) maThueXe);
+                        int updateResult = thanhToanDAO.update(payment);
+                        Log.d("Cash", "Payment record updated with result: " + updateResult);
+                    } else {
+                        Log.e("Cash", "Payment record not found for appTransId: " + appTransId);
+                    }
+
+                    PaymentNotification paymentNotiFragment = new PaymentNotification();
+                    Bundle bundle = new Bundle();
+                    bundle.putString("result", "Đang xử lý");
+                    bundle.putString("subMessage", "Cảm ơn bạn đã sử dụng dịch vụ");
+                    bundle.putBoolean("isCashPayment", true);
+                    paymentNotiFragment.setArguments(bundle);
+
+                    // Sử dụng getParentFragment() để lấy FragmentUserRentVehicle
+                    Fragment parentFragment = getParentFragment();
+                    if (parentFragment != null && parentFragment.isAdded()) {
+                        FragmentTransaction transaction = parentFragment.getChildFragmentManager().beginTransaction();
+                        transaction.replace(R.id.user_rent_vehicle_container, paymentNotiFragment);
+                        transaction.addToBackStack(null);
+                        transaction.commit();
+                    }
+                } else {
+                    Log.e("Cash", "Failed to create rental details");
+                    Toast.makeText(requireContext(), "Có lỗi xảy ra khi tạo chi tiết thuê xe", Toast.LENGTH_SHORT).show();
+                }
+            } else {
+                Log.e("Cash", "Failed to create rental record");
+                Toast.makeText(requireContext(), "Có lỗi xảy ra khi tạo đơn thuê xe", Toast.LENGTH_SHORT).show();
+            }
+        } catch (Exception e) {
+            Log.e("Cash", "Error in handleCashPayment: " + e.getMessage());
+            e.printStackTrace();
+            Toast.makeText(requireContext(), "Có lỗi xảy ra khi xử lý thanh toán: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void handleZaloPayment() {
+        try {
+            CreateOrder orderApi = new CreateOrder();
+            Log.d("ZaloPay", "Amount to pay: " + totalAmount);
+            Log.d("ZaloPay", "APP_ID: " + AppInfo.APP_ID);
+            Log.d("ZaloPay", "MAC_KEY: " + AppInfo.MAC_KEY);
+            JSONObject data = orderApi.createOrder(String.valueOf(totalAmount));
+            Log.d("ZaloPay", "Response data: " + (data != null ? data.toString() : "null"));
+
+            if (data != null) {
+                if (data.has("returncode")) {
+                    int code = data.getInt("returncode");
+                    Log.d("ZaloPay", "Return code: " + code);
+
+                    String errorMessage = "Lỗi không xác định";
+                    switch (code) {
+                        case 1:
+                            if (data.has("zptranstoken")) {
+                                String token = data.getString("zptranstoken");
+                                Log.d("ZaloPay", "Token: " + token);
+                                ZaloPaySDK.getInstance().payOrder(requireActivity(), token, "demozpdk://app", new PayOrderListener() {
+                                    @Override
+                                    public void onPaymentSucceeded(String transactionId, String transToken, String appTransId) {
+                                        Log.d("ZaloPay", "Payment succeeded - transactionId: " + transactionId + ", appTransId: " + appTransId);
+
+                                        // Save payment transaction
+                                        savePaymentTransaction(String.valueOf(totalAmount), "ZaloPay", "Đã thanh toán", transactionId, appTransId);
+
+                                        ThueXe thueXe = new ThueXe();
+                                        thueXe.setMaND(currentUser.getMaND());
+                                        thueXe.setNgayDat(ThueXeUtility.getCurrentDate());
+                                        thueXe.setTrangThai(0); // Đang thuê
+
+                                        Log.d("ZaloPay", "Creating rental record for user: " + currentUser.getMaND());
+                                        long maThueXe = thueXeDAO.insert(thueXe);
+                                        Log.d("ZaloPay", "Rental record created with maThueXe: " + maThueXe);
+
+                                        if (maThueXe > 0) {
+                                            ChiTietThueXe chiTiet = new ChiTietThueXe();
+                                            chiTiet.setMaThueXe((int) maThueXe);
+                                            chiTiet.setMaXe(selectedXe.getMaXe());
+                                            chiTiet.setNgayBatDauDK(edNgayBatDauDK.getText().toString());
+                                            chiTiet.setNgayKetThucDK(edNgayKetThucDK.getText().toString());
+                                            chiTiet.setNgayBatDauTT(edNgayBatDauDK.getText().toString());
+                                            chiTiet.setNgayKetThucTT(edNgayKetThucDK.getText().toString());
+                                            chiTiet.setTienCoc(tienCoc);
+                                            chiTiet.setThanhTien(totalAmount);
+                                            chiTiet.setGhiChu("Thanh toán qua ZaloPay");
+
+                                            Log.d("ZaloPay", "Creating rental details for maThueXe: " + maThueXe);
+                                            long result = chiTietThueXeDAO.insert(chiTiet);
+                                            Log.d("ZaloPay", "Rental details created with result: " + result);
+
+                                            if (result > 0) {
+                                                Log.d("ZaloPay", "Updating vehicle status for maXe: " + selectedXe.getMaXe());
+                                                xeDAO.updateStatus(selectedXe.getMaXe(), 1);
+
+                                                Log.d("ZaloPay", "Updating payment record with maThueXe: " + maThueXe);
+                                                ThanhToan payment = thanhToanDAO.getByMaGiaoDich(appTransId);
+                                                if (payment != null) {
+                                                    payment.setMaThueXe((int) maThueXe);
+                                                    int updateResult = thanhToanDAO.update(payment);
+                                                    Log.d("ZaloPay", "Payment record updated with result: " + updateResult);
+                                                } else {
+                                                    Log.e("ZaloPay", "Payment record not found for appTransId: " + appTransId);
+                                                }
+
+                                                PaymentNotification paymentNotiFragment = new PaymentNotification();
+                                                Bundle bundle = new Bundle();
+                                                bundle.putString("result", "Đã thanh toán");
+                                                bundle.putString("transactionId", transactionId);
+                                                bundle.putString("appTransId", appTransId);
+                                                paymentNotiFragment.setArguments(bundle);
+
+                                                // Sử dụng getParentFragment() để lấy FragmentUserRentVehicle
+                                                Fragment parentFragment = getParentFragment();
+                                                if (parentFragment != null && parentFragment.isAdded()) {
+                                                    FragmentTransaction transaction = parentFragment.getChildFragmentManager().beginTransaction();
+                                                    transaction.replace(R.id.user_rent_vehicle_container, paymentNotiFragment);
+                                                    transaction.addToBackStack(null);
+                                                    transaction.commit();
+                                                }
+                                            } else {
+                                                Log.e("ZaloPay", "Failed to create rental details");
+                                                Toast.makeText(requireContext(), "Có lỗi xảy ra khi tạo chi tiết thuê xe", Toast.LENGTH_SHORT).show();
+                                            }
+                                        } else {
+                                            Log.e("ZaloPay", "Failed to create rental record");
+                                            Toast.makeText(requireContext(), "Có lỗi xảy ra khi tạo đơn thuê xe", Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onPaymentCanceled(String zpTransToken, String appTransId) {
+                                        Log.d("ZaloPay", "Payment canceled - zpTransToken: " + zpTransToken);
+
+                                        String amount = tvThanhTien.getText().toString();
+                                        String paymentMethod = spinnerPhuongThuc.getText().toString();
+                                        savePaymentTransaction(amount, paymentMethod, "Chưa thanh toán", null, null);
+
+                                        PaymentNotification paymentNotiFragment = new PaymentNotification();
+                                        Bundle bundle = new Bundle();
+                                        bundle.putString("result", "Chưa thanh toán");
+                                        paymentNotiFragment.setArguments(bundle);
+
+                                        // Sử dụng getParentFragment() để lấy FragmentUserRentVehicle
+                                        Fragment parentFragment = getParentFragment();
+                                        if (parentFragment != null && parentFragment.isAdded()) {
+                                            FragmentTransaction transaction = parentFragment.getChildFragmentManager().beginTransaction();
+                                            transaction.replace(R.id.user_rent_vehicle_container, paymentNotiFragment);
+                                            transaction.addToBackStack(null);
+                                            transaction.commit();
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onPaymentError(ZaloPayError zaloPayError, String zpTransToken, String appTransId) {
+                                        Log.d("ZaloPay", "Payment error - " + zaloPayError.toString());
+
+                                        String amount = tvThanhTien.getText().toString();
+                                        String paymentMethod = spinnerPhuongThuc.getText().toString();
+                                        savePaymentTransaction(amount, paymentMethod, "Thất bại", null, null);
+
+                                        PaymentNotification paymentNotiFragment = new PaymentNotification();
+                                        Bundle bundle = new Bundle();
+                                        bundle.putString("result", "Thất bại");
+                                        paymentNotiFragment.setArguments(bundle);
+
+                                        // Sử dụng getParentFragment() để lấy FragmentUserRentVehicle
+                                        Fragment parentFragment = getParentFragment();
+                                        if (parentFragment != null && parentFragment.isAdded()) {
+                                            FragmentTransaction transaction = parentFragment.getChildFragmentManager().beginTransaction();
+                                            transaction.replace(R.id.user_rent_vehicle_container, paymentNotiFragment);
+                                            transaction.addToBackStack(null);
+                                            transaction.commit();
+                                        }
+                                    }
+                                });
+                            } else {
+                                Toast.makeText(requireContext(), "Không nhận được token thanh toán", Toast.LENGTH_SHORT).show();
+                            }
+                            break;
+                        case -2:
+                            errorMessage = "Lỗi xác thực. Vui lòng kiểm tra lại thông tin thanh toán.";
+                            break;
+                        case -3:
+                            errorMessage = "Lỗi kết nối. Vui lòng thử lại sau.";
+                            break;
+                        case -4:
+                            errorMessage = "Lỗi dữ liệu. Vui lòng kiểm tra lại thông tin.";
+                            break;
+                        default:
+                            errorMessage = data.has("returnmessage") && !data.getString("returnmessage").isEmpty()
+                                    ? data.getString("returnmessage")
+                                    : "Lỗi không xác định. Mã lỗi: " + code;
+                    }
+
+                    if (code != 1) {
+                        Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_LONG).show();
+                    }
+                } else {
+                    Toast.makeText(requireContext(), "Không nhận được mã phản hồi từ ZaloPay", Toast.LENGTH_SHORT).show();
+                }
+            } else {
+                Toast.makeText(requireContext(), "Không thể kết nối với ZaloPay", Toast.LENGTH_SHORT).show();
+            }
+        } catch (Exception e) {
+            Log.e("ZaloPay", "Error in handleZaloPayment: " + e.getMessage());
+            e.printStackTrace();
+            Toast.makeText(requireContext(), "Có lỗi xảy ra: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (data != null) {
             ZaloPaySDK.getInstance().onResult(data);
-            
+
             // Get payment result from ZaloPay
             String zpTransToken = data.getStringExtra("zptranstoken");
             String appTransId = data.getStringExtra("apptransid");
             String status = data.getStringExtra("status");
-            
+
             if (status != null) {
                 // Create and show PaymentNoti fragment
-                PaymentNoti paymentNotiFragment = new PaymentNoti();
+                PaymentNotification paymentNotiFragment = new PaymentNotification();
                 Bundle bundle = new Bundle();
-                
+
                 switch (status) {
                     case "success":
-                        bundle.putString("result", "Thanh toán thành công");
+                        bundle.putString("result", "Đã thanh toán");
                         bundle.putString("transactionId", zpTransToken);
                         bundle.putString("appTransId", appTransId);
                         break;
                     case "cancel":
-                        bundle.putString("result", "Hủy thanh toán");
+                        bundle.putString("result", "Chưa thanh toán");
                         break;
                     default:
-                        bundle.putString("result", "Lỗi thanh toán");
+                        bundle.putString("result", "Thất bại");
                         break;
                 }
-                
+
                 paymentNotiFragment.setArguments(bundle);
 
                 // Add fragment on top of current screen
@@ -600,27 +672,6 @@ public class UserRentVehicleStart extends Fragment {
                 transaction.replace(R.id.user_rent_vehicle_container, paymentNotiFragment);
                 transaction.addToBackStack(null);
                 transaction.commit();
-
-                // Hide the rent vehicle container
-                View container = requireActivity().findViewById(R.id.user_rent_vehicle_container);
-                if (container != null) {
-                    container.setVisibility(View.GONE);
-                }
-
-                // Show homepage elements
-                TextView tvWelcome = requireActivity().findViewById(R.id.tv_welcome);
-                AutoCompleteTextView tvSearch = requireActivity().findViewById(R.id.tv_search);
-                Spinner spinnerVehicleType = requireActivity().findViewById(R.id.spinner_vehicle_type);
-                Spinner spinnerStatus = requireActivity().findViewById(R.id.spinner_status);
-                Button btnClearFilter = requireActivity().findViewById(R.id.btn_clear_filter);
-                RecyclerView recyclerView = requireActivity().findViewById(R.id.vehicle_list);
-
-                if (tvWelcome != null) tvWelcome.setVisibility(View.VISIBLE);
-                if (tvSearch != null) tvSearch.setVisibility(View.VISIBLE);
-                if (spinnerVehicleType != null) spinnerVehicleType.setVisibility(View.VISIBLE);
-                if (spinnerStatus != null) spinnerStatus.setVisibility(View.VISIBLE);
-                if (btnClearFilter != null) btnClearFilter.setVisibility(View.VISIBLE);
-                if (recyclerView != null) recyclerView.setVisibility(View.VISIBLE);
             }
         }
     }

@@ -8,7 +8,7 @@ android {
 
     defaultConfig {
         applicationId = "com.example.afinal"
-        minSdk = 30
+        minSdk = 29
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -36,11 +36,9 @@ dependencies {
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(fileTree(mapOf(
-        "dir" to "C:\\Users\\vunha\\Desktop\\ZaloPayLib",
+        "dir" to "E:\\RentVehicle\\app\\libs",
         "include" to listOf("*.aar", "*.jar"),
-        "exclude" to listOf("")
     )))
-    implementation(files("D:\\Pnh_10062003\\Code\\Final\\app\\libs\\zpdk-release-v3.1.aar"))
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)

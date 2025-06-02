@@ -14,7 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.afinal.Database.Model.NguoiDung;
 import com.example.afinal.Database.Utilites.NguoiDungUtility;
 import com.example.afinal.Interfaces.Admin.AdminHomepage;
-import com.example.afinal.Interfaces.User.UserHomepage;
+import com.example.afinal.Interfaces.User.MainActivity;
 import com.example.afinal.R;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -36,8 +36,8 @@ public class SignIn extends AppCompatActivity {
         nguoiDungUtility = NguoiDungUtility.getInstance(this);
 
         setupInputValidation();
-        inputPassword.setText("123456");
-        inputPhone.setText("0945678901");
+        inputPassword.setText("password2");
+        inputPhone.setText("0912345678");
         btnSignIn.setOnClickListener(view -> handleSignIn());
 
         tvSignUp.setOnClickListener(v -> startActivity(new Intent(this, SignUp.class)));
@@ -110,7 +110,7 @@ public class SignIn extends AppCompatActivity {
             if (user != null) {
                 Intent intent;
                 if (user.getVaiTro() == 0) {
-                    intent = new Intent(SignIn.this, UserHomepage.class);
+                    intent = new Intent(SignIn.this, MainActivity.class);
                     intent.putExtra("UserLogin", user);
                 } else {
                     intent = new Intent(SignIn.this, AdminHomepage.class);

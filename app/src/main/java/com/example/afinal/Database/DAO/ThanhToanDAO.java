@@ -414,4 +414,19 @@ public class ThanhToanDAO {
         close();
         return thanhToan;
     }
+
+    public ThanhToan getByMaThueXe(int maThueXe) {
+        open();
+        ThanhToan thanhToan = null;
+        try (Cursor c = db.rawQuery("SELECT * FROM THANHTOAN WHERE MaThueXe = ?",
+                new String[]{String.valueOf(maThueXe)})) {
+            if (c.moveToFirst()) {
+                thanhToan = getThanhToanFromCursor(c);
+            }
+        } catch (SQLiteException e) {
+            Log.e(TAG, "Error getting thanh toan by ma thue xe: " + e.getMessage());
+        }
+        close();
+        return thanhToan;
+    }
 }

@@ -18,7 +18,7 @@ import vn.zalopay.sdk.ZaloPaySDK;
 /**
  * @noinspection ALL
  */
-public class UserHomepage extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity {
     BottomNavigationView bottomNavigationView;
     ViewPager viewPager;
 

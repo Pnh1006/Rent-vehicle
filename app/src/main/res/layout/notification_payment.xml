@@ -51,19 +51,20 @@
                 android:layout_marginBottom="16dp"
                 android:fontFamily="@font/title_font"
                 android:gravity="center"
-                android:text="@string/thanh_toan_that_bai"
+                android:text="@string/thanh_toan_thanh_cong"
                 android:textColor="@color/title_color"
                 android:textSize="22sp"
                 android:textStyle="bold" />
 
             <TextView
+                android:id="@+id/tvSubMessage"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
                 android:alpha="0.8"
                 android:fontFamily="@font/sub_title_font"
                 android:gravity="center"
-                android:text="@string/thu_lai"
+                android:text="@string/giao_dich_thanh_cong"
                 android:textColor="@color/primary_text_color"
                 android:textSize="16sp"
                 tools:ignore="TextContrastCheck" />
@@ -72,45 +73,70 @@
 
     </androidx.cardview.widget.CardView>
 
+    <!-- Button Container -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
         android:layout_marginTop="24dp"
-        android:gravity="center"
-        android:orientation="horizontal"
-        android:weightSum="6">
+        android:orientation="vertical">
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnThongTinGiaoDich"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-            android:layout_width="0dp"
+        <!-- Row 1: Xem thông tin buttons -->
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_weight="3"
-            android:fontFamily="@font/sub_title_font"
-            android:padding="12dp"
-            android:text="@string/xem_thong_tin_giao_dich"
-            android:textColor="@color/title_color"
-            android:textSize="14sp"
-            app:cornerRadius="8dp"
-            app:strokeColor="@color/title_color"
-            app:strokeWidth="1dp"
-            tools:ignore="VisualLintButtonSize" />
+            android:layout_marginBottom="12dp"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnThongTinThueXe"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_weight="1"
+                android:fontFamily="@font/sub_title_font"
+                android:padding="12dp"
+                android:text="@string/thue_xe"
+                android:textColor="@color/title_color"
+                android:textSize="14sp"
+                app:cornerRadius="8dp"
+                app:strokeColor="@color/title_color"
+                app:strokeWidth="1dp"
+                tools:ignore="VisualLintButtonSize" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnThongTinGiaoDich"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_weight="1"
+                android:fontFamily="@font/sub_title_font"
+                android:padding="12dp"
+                android:text="@string/giao_dich"
+                android:textColor="@color/title_color"
+                android:textSize="14sp"
+                app:cornerRadius="8dp"
+                app:strokeColor="@color/title_color"
+                app:strokeWidth="1dp"
+                tools:ignore="VisualLintButtonSize" />
+
+        </LinearLayout>
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnTrangChu"
             style="@style/Widget.MaterialComponents.Button"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
+            android:layout_gravity="center"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_weight="3"
             android:backgroundTint="@color/title_color"
             android:fontFamily="@font/sub_title_font"
             android:padding="12dp"
-            android:text="@string/quay_ve_trang_chu"
+            android:text="@string/trang_chu"
             android:textColor="@android:color/white"
-            android:textSize="14sp"
+            android:textSize="16sp"
             app:cornerRadius="8dp"
             tools:ignore="VisualLintButtonSize" />
 

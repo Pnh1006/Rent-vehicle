@@ -4,81 +4,38 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AutoCompleteTextView;
-import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.Spinner;
 import android.widget.TextView;
 
-import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
+import androidx.viewpager.widget.ViewPager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.afinal.Database.Model.Xe;
 import com.example.afinal.Database.Utilites.XeUtility;
-import com.example.afinal.Interfaces.User.RentVehicle.UserRentVehicleStart;
+import com.example.afinal.Interfaces.User.UserViewPagerAdapter;
 import com.example.afinal.R;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.List;
 
 public class AdapterUserHomepageRecycleView extends RecyclerView.Adapter<AdapterUserHomepageRecycleView.ViewHolder> {
+    private static final String TAG = "AdapterHomepage";
     private Context context;
     private List<Xe> xeList;
     private XeUtility xeUtility;
     private Fragment parentFragment;
-    private View container;
 
     public AdapterUserHomepageRecycleView(Context context, List<Xe> xeList, Fragment parentFragment) {
         this.context = context;
         this.xeList = xeList;
         this.xeUtility = new XeUtility(context);
         this.parentFragment = parentFragment;
-        this.container = parentFragment.getView();
-    }
-
-    private void showHomepageElements() {
-        if (container != null) {
-            TextView tvWelcome = container.findViewById(R.id.tv_welcome);
-            AutoCompleteTextView tvSearch = container.findViewById(R.id.tv_search);
-            Spinner spinnerVehicleType = container.findViewById(R.id.spinner_vehicle_type);
-            Spinner spinnerStatus = container.findViewById(R.id.spinner_status);
-            Button btnClearFilter = container.findViewById(R.id.btn_clear_filter);
-            RecyclerView recyclerView = container.findViewById(R.id.vehicle_list);
-            View fragmentContainer = container.findViewById(R.id.user_rent_vehicle_container);
-
-            if (tvWelcome != null) tvWelcome.setVisibility(View.VISIBLE);
-            if (tvSearch != null) tvSearch.setVisibility(View.VISIBLE);
-            if (spinnerVehicleType != null) spinnerVehicleType.setVisibility(View.VISIBLE);
-            if (spinnerStatus != null) spinnerStatus.setVisibility(View.VISIBLE);
-            if (btnClearFilter != null) btnClearFilter.setVisibility(View.VISIBLE);
-            if (recyclerView != null) recyclerView.setVisibility(View.VISIBLE);
-            if (fragmentContainer != null) fragmentContainer.setVisibility(View.GONE);
-        }
-    }
-
-    private void hideHomepageElements() {
-        if (container != null) {
-            TextView tvWelcome = container.findViewById(R.id.tv_welcome);
-            AutoCompleteTextView tvSearch = container.findViewById(R.id.tv_search);
-            Spinner spinnerVehicleType = container.findViewById(R.id.spinner_vehicle_type);
-            Spinner spinnerStatus = container.findViewById(R.id.spinner_status);
-            Button btnClearFilter = container.findViewById(R.id.btn_clear_filter);
-            RecyclerView recyclerView = container.findViewById(R.id.vehicle_list);
-            View fragmentContainer = container.findViewById(R.id.user_rent_vehicle_container);
-
-            if (tvWelcome != null) tvWelcome.setVisibility(View.GONE);
-            if (tvSearch != null) tvSearch.setVisibility(View.GONE);
-            if (spinnerVehicleType != null) spinnerVehicleType.setVisibility(View.GONE);
-            if (spinnerStatus != null) spinnerStatus.setVisibility(View.GONE);
-            if (btnClearFilter != null) btnClearFilter.setVisibility(View.GONE);
-            if (recyclerView != null) recyclerView.setVisibility(View.GONE);
-            if (fragmentContainer != null) fragmentContainer.setVisibility(View.VISIBLE);
-        }
     }
 
     @NonNull
@@ -98,6 +55,12 @@ public class AdapterUserHomepageRecycleView extends RecyclerView.Adapter<Adapter
         holder.txtHangXe.setText(xe.getLoaiXe());
         holder.txtTrangThai.setText(xeUtility.getTrangThaiText(xe.getTrangThai()));
 
+        if (xe.getTrangThai() == 0) {
+            holder.txtThueXe.setVisibility(View.VISIBLE);
+        } else {
+            holder.txtThueXe.setVisibility(View.GONE);
+        }
+
         if (xe.getHinhAnh() != null && !xe.getHinhAnh().isEmpty()) {
             try {
                 Bitmap bitmap = BitmapFactory.decodeFile(xe.getHinhAnh());
@@ -114,27 +77,24 @@ public class AdapterUserHomepageRecycleView extends RecyclerView.Adapter<Adapter
         }
 
         holder.txtThueXe.setOnClickListener(v -> {
-            Bundle bundle = new Bundle();
-            bundle.putSerializable("xe", xe);
-
-            UserRentVehicleStart rentVehicleStartFragment = new UserRentVehicleStart();
-            rentVehicleStartFragment.setArguments(bundle);
-
-            hideHomepageElements();
-
-            OnBackPressedCallback callback = new OnBackPressedCallback(true) {
-                @Override
-                public void handleOnBackPressed() {
-                    showHomepageElements();
-                    this.remove();
-                }
-            };
-            parentFragment.requireActivity().getOnBackPressedDispatcher().addCallback(parentFragment, callback);
+            Log.d(TAG, "Thuê xe button clicked for vehicle: " + xe.getTenXe());
             
-            FragmentTransaction transaction = parentFragment.getParentFragmentManager().beginTransaction();
-            transaction.replace(R.id.user_rent_vehicle_container, rentVehicleStartFragment);
-            transaction.addToBackStack(null);
-            transaction.commit();
+            // Lưu xe được chọn vào ViewPagerAdapter
+            ViewPager viewPager = parentFragment.requireActivity().findViewById(R.id.view_pager);
+            if (viewPager != null && viewPager.getAdapter() instanceof UserViewPagerAdapter) {
+                UserViewPagerAdapter adapter = (UserViewPagerAdapter) viewPager.getAdapter();
+                adapter.setSelectedXe(xe, true);
+                Log.d(TAG, "Selected vehicle saved: " + xe.getTenXe());
+                
+                // Chuyển sang tab Thuê xe
+                Log.d(TAG, "Switching to rent vehicle tab using ViewPager");
+                viewPager.setCurrentItem(1, true);
+                
+                // Đảm bảo ViewPager cập nhật ngay lập tức
+                viewPager.post(() -> {
+                    adapter.notifyDataSetChanged();
+                });
+            }
         });
     }
 

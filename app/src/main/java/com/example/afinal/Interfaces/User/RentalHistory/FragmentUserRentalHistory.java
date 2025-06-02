@@ -60,9 +60,26 @@ public class FragmentUserRentalHistory extends Fragment {
         List<ThanhToan> transactions = thanhToanDAO.getByMaND(nguoiDungUtility.getCurrentUser().getMaND());
 
         if (transactions != null && !transactions.isEmpty()) {
+            // Sort transactions by date in descending order (newest first)
+            transactions.sort((t1, t2) -> t2.getNgayThucHien().compareTo(t1.getNgayThucHien()));
+            
             thanhToanList.clear();
             thanhToanList.addAll(transactions);
             adapter.updateData(thanhToanList);
+
+            // If we have a specific transaction to show (from appTransId)
+            if (getArguments() != null) {
+                String appTransId = getArguments().getString("appTransId");
+                if (appTransId != null) {
+                    // Find the transaction and scroll to it
+                    for (int i = 0; i < thanhToanList.size(); i++) {
+                        if (thanhToanList.get(i).getMaGiaoDich().equals(appTransId)) {
+                            recyclerView.scrollToPosition(i);
+                            break;
+                        }
+                    }
+                }
+            }
         } else {
             Toast.makeText(requireContext(), "Không có giao dịch nào", Toast.LENGTH_SHORT).show();
         }

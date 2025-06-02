@@ -376,4 +376,17 @@ public class ThueXeDAO {
         }
         return null;
     }
+
+    public ThueXe getLatestRentalByUser(int maND) {
+        try (Cursor c = db.rawQuery(
+                "SELECT * FROM THUEXE WHERE MaND = ? ORDER BY MaThueXe DESC LIMIT 1",
+                new String[]{String.valueOf(maND)})) {
+            if (c.moveToFirst()) {
+                return getThueXeFromCursor(c);
+            }
+        } catch (SQLiteException e) {
+            Log.e(TAG, "Error getting latest rental for user: " + e.getMessage());
+        }
+        return null;
+    }
 }
