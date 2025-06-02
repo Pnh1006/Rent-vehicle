@@ -2,7 +2,6 @@ package com.example.afinal.Interfaces.User.RentVehicle;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.os.StrictMode;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +12,7 @@ import android.widget.Toast;
 import android.widget.ScrollView;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
+import android.app.AlertDialog;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -48,8 +48,8 @@ import java.util.Locale;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.stream.Collectors;
 
-import vn.zalopay.sdk.Environment;
 import vn.zalopay.sdk.ZaloPayError;
 import vn.zalopay.sdk.ZaloPaySDK;
 import vn.zalopay.sdk.listeners.PayOrderListener;
@@ -79,6 +79,22 @@ public class FragmentUserRentVehicle extends Fragment {
     private boolean isViewingHistory = false;
     private int currentRentalId = -1;
     private static final String TAG = "RentVehicle";
+    private static final int TRANG_THAI_DANG_THUE = 0;    // "Đang thuê"
+    private static final int TRANG_THAI_DA_TRA = 1;       // "Đã trả"
+    private static final int TRANG_THAI_DANG_XU_LY = 2;   // "Đang xử lý"
+    private static final int TRANG_THAI_HUY = 3;          // "Hủy"
+    private static final int THANH_TOAN_DA_THANH_TOAN = 0;  // "Đã thanh toán"
+    private static final int THANH_TOAN_CHUA_THANH_TOAN = 1; // "Chưa thanh toán"
+    private static final int THANH_TOAN_DANG_XU_LY = 2;     // "Đang xử lý"
+    private static final int THANH_TOAN_THAT_BAI = 3;       // "Thất bại"
+    private boolean isDepositPayment = false;
+
+    public static final class RentalStatus {
+        public static final int PROCESSING = 2;
+        public static final int RENTING = 0;
+        public static final int COMPLETED = 1;
+        public static final int CANCELLED = 3;
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -172,11 +188,8 @@ public class FragmentUserRentVehicle extends Fragment {
     public void onResume() {
         super.onResume();
         Log.d(TAG, "onResume called");
-
-        // Only load latest rental info if we're not coming from homepage
         Bundle args = getArguments();
         boolean isFromHomepage = args != null && args.getBoolean("isFromHomepage", false);
-
         if (!isFromHomepage && currentUser != null) {
             loadLatestRentalInfo();
         }
@@ -221,29 +234,9 @@ public class FragmentUserRentVehicle extends Fragment {
             });
             recyclerViewLichSuThue.setAdapter(rentHistoryAdapter);
 
-            btnDungThue.setOnClickListener(v -> {
-                if (isViewingHistory) {
-                    showEmptyView();
-                    loadRentHistory(nguoiDungUtility.getCurrentUser().getMaND());
-                } else {
-                    StrictMode.ThreadPolicy policy = new
-                            StrictMode.ThreadPolicy.Builder().permitAll().build();
-                    StrictMode.setThreadPolicy(policy);
-
-                    // ZaloPay SDK Init
-                    ZaloPaySDK.init(553, Environment.SANDBOX);
-
-                    setupButtonListeners();
-                }
-            });
-
-            btnHuyThue.setOnClickListener(v -> {
-
-            });
-
-            btnBatDauThue.setOnClickListener(v -> {
-
-            });
+            btnDungThue.setOnClickListener(v -> handleStopRental());
+            btnBatDauThue.setOnClickListener(v -> handleStartRental());
+            btnHuyThue.setOnClickListener(v -> handleCancelRental());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -264,7 +257,7 @@ public class FragmentUserRentVehicle extends Fragment {
             xeDAO = new XeDAO(requireContext());
             thueXeDAO = new ThueXeDAO(requireContext());
             chiTietThueXeDAO = new ChiTietThueXeDAO(requireContext());
-            dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+            dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
             inputDateFormat = new SimpleDateFormat("yyyy-M-d HH:mm", Locale.getDefault());
         } catch (Exception e) {
             e.printStackTrace();
@@ -291,128 +284,138 @@ public class FragmentUserRentVehicle extends Fragment {
                 Log.d("RentVehicle", "=== THÔNG TIN THUÊ XE ===");
                 Log.d("RentVehicle", "Số lượng đơn thuê xe: " + userRentals.size());
 
-                // Sắp xếp theo ngày đặt mới nhất
-                userRentals.sort((r1, r2) -> r2.getNgayDat().compareTo(r1.getNgayDat()));
-                ThueXe latestRental = userRentals.get(0);
+                // Lọc bỏ các đơn đã hủy và sắp xếp theo ngày đặt mới nhất
+                userRentals = userRentals.stream()
+                    .filter(rental -> rental.getTrangThai() != TRANG_THAI_HUY)
+                    .sorted((r1, r2) -> r2.getNgayDat().compareTo(r1.getNgayDat()))
+                    .collect(Collectors.toList());
 
-                Log.d("RentVehicle", "Đơn thuê xe mới nhất:");
-                Log.d("RentVehicle", "- Mã thuê xe: " + latestRental.getMaThueXe());
-                Log.d("RentVehicle", "- Ngày đặt: " + latestRental.getNgayDat());
-                Log.d("RentVehicle", "- Trạng thái: " + latestRental.getTrangThai());
+                if (!userRentals.isEmpty()) {
+                    ThueXe latestRental = userRentals.get(0);
 
-                // Lấy thông tin chi tiết thuê xe
-                ChiTietThueXeDAO chiTietDAO = new ChiTietThueXeDAO(requireContext());
-                List<ChiTietThueXe> detailsList = chiTietDAO.getByMaThueXe(latestRental.getMaThueXe());
+                    Log.d("RentVehicle", "Đơn thuê xe mới nhất:");
+                    Log.d("RentVehicle", "- Mã thuê xe: " + latestRental.getMaThueXe());
+                    Log.d("RentVehicle", "- Ngày đặt: " + latestRental.getNgayDat());
+                    Log.d("RentVehicle", "- Trạng thái: " + latestRental.getTrangThai());
 
-                if (detailsList != null && !detailsList.isEmpty()) {
-                    Log.d("RentVehicle", "=== CHI TIẾT THUÊ XE ===");
-                    ChiTietThueXe details = detailsList.get(0);
-                    Log.d("RentVehicle", "- Mã xe: " + details.getMaXe());
-                    Log.d("RentVehicle", "- Ngày bắt đầu DK: " + details.getNgayBatDauDK());
-                    Log.d("RentVehicle", "- Ngày kết thúc DK: " + details.getNgayKetThucDK());
-                    Log.d("RentVehicle", "- Ngày bắt đầu TT: " + details.getNgayBatDauTT());
-                    Log.d("RentVehicle", "- Ngày kết thúc TT: " + details.getNgayKetThucTT());
-                    Log.d("RentVehicle", "- Tiền cọc: " + details.getTienCoc());
-                    Log.d("RentVehicle", "- Thành tiền: " + details.getThanhTien());
-                    Log.d("RentVehicle", "- Ghi chú: " + details.getGhiChu());
+                    // Lấy thông tin chi tiết thuê xe
+                    ChiTietThueXeDAO chiTietDAO = new ChiTietThueXeDAO(requireContext());
+                    List<ChiTietThueXe> detailsList = chiTietDAO.getByMaThueXe(latestRental.getMaThueXe());
 
-                    // Lấy thông tin xe
-                    XeDAO xeDAO = new XeDAO(requireContext());
-                    Xe xe = xeDAO.getById(details.getMaXe());
+                    if (detailsList != null && !detailsList.isEmpty()) {
+                        Log.d("RentVehicle", "=== CHI TIẾT THUÊ XE ===");
+                        ChiTietThueXe details = detailsList.get(0);
+                        Log.d("RentVehicle", "- Mã xe: " + details.getMaXe());
+                        Log.d("RentVehicle", "- Ngày bắt đầu DK: " + details.getNgayBatDauDK());
+                        Log.d("RentVehicle", "- Ngày kết thúc DK: " + details.getNgayKetThucDK());
+                        Log.d("RentVehicle", "- Ngày bắt đầu TT: " + details.getNgayBatDauTT());
+                        Log.d("RentVehicle", "- Ngày kết thúc TT: " + details.getNgayKetThucTT());
+                        Log.d("RentVehicle", "- Tiền cọc: " + details.getTienCoc());
+                        Log.d("RentVehicle", "- Thành tiền: " + details.getThanhTien());
+                        Log.d("RentVehicle", "- Ghi chú: " + details.getGhiChu());
 
-                    if (xe != null) {
-                        Log.d("RentVehicle", "=== THÔNG TIN XE ===");
-                        Log.d("RentVehicle", "- Tên xe: " + xe.getTenXe());
-                        Log.d("RentVehicle", "- Biển số: " + xe.getBienSo());
-                        Log.d("RentVehicle", "- Loại xe: " + xe.getLoaiXe());
-                        Log.d("RentVehicle", "- Giá thuê: " + xe.getGiaThue());
+                        // Lấy thông tin xe
+                        XeDAO xeDAO = new XeDAO(requireContext());
+                        Xe xe = xeDAO.getById(details.getMaXe());
 
-                        // Lấy thông tin thanh toán
-                        ThanhToanDAO thanhToanDAO = new ThanhToanDAO(requireContext());
-                        ThanhToan thanhToan = thanhToanDAO.getByMaThueXe(latestRental.getMaThueXe());
+                        if (xe != null) {
+                            Log.d("RentVehicle", "=== THÔNG TIN XE ===");
+                            Log.d("RentVehicle", "- Tên xe: " + xe.getTenXe());
+                            Log.d("RentVehicle", "- Biển số: " + xe.getBienSo());
+                            Log.d("RentVehicle", "- Loại xe: " + xe.getLoaiXe());
+                            Log.d("RentVehicle", "- Giá thuê: " + xe.getGiaThue());
 
-                        try {
-                            // Lấy ngày hiện tại và reset về 00:00:00
-                            Calendar cal = Calendar.getInstance();
-                            cal.set(Calendar.HOUR_OF_DAY, 0);
-                            cal.set(Calendar.MINUTE, 0);
-                            cal.set(Calendar.SECOND, 0);
-                            cal.set(Calendar.MILLISECOND, 0);
-                            Date ngayHienTai = cal.getTime();
+                            // Lấy thông tin thanh toán
+                            ThanhToanDAO thanhToanDAO = new ThanhToanDAO(requireContext());
+                            ThanhToan thanhToan = thanhToanDAO.getByMaThueXe(latestRental.getMaThueXe());
 
-                            // Parse ngày kết thúc từ chi tiết thuê xe
-                            String ngayKetThucStr = details.getNgayKetThucTT();
-                            if (ngayKetThucStr == null || ngayKetThucStr.isEmpty()) {
-                                ngayKetThucStr = details.getNgayKetThucDK();
-                            }
-
-                            Date ngayKetThuc = null;
-                            if (ngayKetThucStr != null && !ngayKetThucStr.isEmpty()) {
-                                try {
-                                    // Thử parse với định dạng mới (không có số 0 ở đầu)
-                                    ngayKetThuc = inputDateFormat.parse(ngayKetThucStr);
-                                } catch (Exception e1) {
-                                    Log.e("RentVehicle", "Lỗi parse ngày với định dạng thông thường: " + e1.getMessage());
-                                    try {
-                                        // Nếu thất bại, thử chuyển đổi định dạng ngày
-                                        String[] parts = ngayKetThucStr.split(" ")[0].split("-");
-                                        if (parts.length == 3) {
-                                            @SuppressLint("DefaultLocale") String reformattedDate = String.format("%s-%d-%d %s",
-                                                    parts[0],
-                                                    Integer.parseInt(parts[1]),
-                                                    Integer.parseInt(parts[2]),
-                                                    ngayKetThucStr.contains(" ") ? ngayKetThucStr.split(" ")[1] : "00:00");
-                                            ngayKetThuc = inputDateFormat.parse(reformattedDate);
-                                        }
-                                    } catch (Exception e2) {
-                                        Log.e("RentVehicle", "Lỗi parse ngày sau khi format lại: " + e2.getMessage());
-                                        throw e2;
-                                    }
-                                }
-                            }
-
-                            if (ngayKetThuc != null) {
-                                // Reset ngày kết thúc về 00:00:00
-                                cal.setTime(ngayKetThuc);
+                            try {
+                                // Lấy ngày hiện tại và reset về 00:00:00
+                                Calendar cal = Calendar.getInstance();
                                 cal.set(Calendar.HOUR_OF_DAY, 0);
                                 cal.set(Calendar.MINUTE, 0);
                                 cal.set(Calendar.SECOND, 0);
                                 cal.set(Calendar.MILLISECOND, 0);
-                                ngayKetThuc = cal.getTime();
+                                Date ngayHienTai = cal.getTime();
 
-                                Log.d("RentVehicle", "=== SO SÁNH NGÀY ===");
-                                Log.d("RentVehicle", "Ngày kết thúc: " + inputDateFormat.format(ngayKetThuc));
-                                Log.d("RentVehicle", "Ngày hiện tại: " + inputDateFormat.format(ngayHienTai));
-                                Log.d("RentVehicle", "Kết quả so sánh: " + ngayKetThuc.compareTo(ngayHienTai));
+                                // Parse ngày kết thúc từ chi tiết thuê xe
+                                String ngayKetThucStr = details.getNgayKetThucTT();
+                                if (ngayKetThucStr == null || ngayKetThucStr.isEmpty()) {
+                                    ngayKetThucStr = details.getNgayKetThucDK();
+                                }
 
-                                // So sánh ngày
-                                if (ngayKetThuc.compareTo(ngayHienTai) >= 0) {
-                                    Log.d("RentVehicle", "Hiển thị thông tin thuê xe (ngày kết thúc >= ngày hiện tại)");
-                                    showRentalInfoView();
-                                    displayRentalInfo(latestRental, details, xe, currentUser, thanhToan);
+                                Date ngayKetThuc = null;
+                                if (ngayKetThucStr != null && !ngayKetThucStr.isEmpty()) {
+                                    try {
+                                        // Thử parse với định dạng mới (không có số 0 ở đầu)
+                                        ngayKetThuc = inputDateFormat.parse(ngayKetThucStr);
+                                    } catch (Exception e1) {
+                                        Log.e("RentVehicle", "Lỗi parse ngày với định dạng thông thường: " + e1.getMessage());
+                                        try {
+                                            // Nếu thất bại, thử chuyển đổi định dạng ngày
+                                            String[] parts = ngayKetThucStr.split(" ")[0].split("-");
+                                            if (parts.length == 3) {
+                                                @SuppressLint("DefaultLocale") String reformattedDate = String.format("%s-%d-%d %s",
+                                                        parts[0],
+                                                        Integer.parseInt(parts[1]),
+                                                        Integer.parseInt(parts[2]),
+                                                        ngayKetThucStr.contains(" ") ? ngayKetThucStr.split(" ")[1] : "00:00");
+                                                ngayKetThuc = inputDateFormat.parse(reformattedDate);
+                                            }
+                                        } catch (Exception e2) {
+                                            Log.e("RentVehicle", "Lỗi parse ngày sau khi format lại: " + e2.getMessage());
+                                            throw e2;
+                                        }
+                                    }
+                                }
+
+                                if (ngayKetThuc != null) {
+                                    // Reset ngày kết thúc về 00:00:00
+                                    cal.setTime(ngayKetThuc);
+                                    cal.set(Calendar.HOUR_OF_DAY, 0);
+                                    cal.set(Calendar.MINUTE, 0);
+                                    cal.set(Calendar.SECOND, 0);
+                                    cal.set(Calendar.MILLISECOND, 0);
+                                    ngayKetThuc = cal.getTime();
+
+                                    Log.d("RentVehicle", "=== SO SÁNH NGÀY ===");
+                                    Log.d("RentVehicle", "Ngày kết thúc: " + inputDateFormat.format(ngayKetThuc));
+                                    Log.d("RentVehicle", "Ngày hiện tại: " + inputDateFormat.format(ngayHienTai));
+                                    Log.d("RentVehicle", "Kết quả so sánh: " + ngayKetThuc.compareTo(ngayHienTai));
+
+                                    // So sánh ngày
+                                    if (ngayKetThuc.compareTo(ngayHienTai) >= 0) {
+                                        Log.d("RentVehicle", "Hiển thị thông tin thuê xe (ngày kết thúc >= ngày hiện tại)");
+                                        showRentalInfoView();
+                                        displayRentalInfo(latestRental, details, xe, currentUser, thanhToan);
+                                    } else {
+                                        Log.d("RentVehicle", "Hiển thị lịch sử thuê xe (ngày kết thúc < ngày hiện tại)");
+                                        showEmptyView();
+                                        loadRentHistory(currentUser.getMaND());
+                                    }
                                 } else {
-                                    Log.d("RentVehicle", "Hiển thị lịch sử thuê xe (ngày kết thúc < ngày hiện tại)");
+                                    Log.d("RentVehicle", "Không có ngày kết thúc");
                                     showEmptyView();
                                     loadRentHistory(currentUser.getMaND());
                                 }
-                            } else {
-                                Log.d("RentVehicle", "Không có ngày kết thúc");
+                            } catch (Exception e) {
+                                Log.e("RentVehicle", "Lỗi parse ngày: " + e.getMessage());
+                                e.printStackTrace();
                                 showEmptyView();
                                 loadRentHistory(currentUser.getMaND());
                             }
-                        } catch (Exception e) {
-                            Log.e("RentVehicle", "Lỗi parse ngày: " + e.getMessage());
-                            e.printStackTrace();
+                        } else {
+                            Log.d("RentVehicle", "Không có chi tiết thuê xe");
                             showEmptyView();
-                            loadRentHistory(currentUser.getMaND());
                         }
                     } else {
-                        Log.d("RentVehicle", "Không có chi tiết thuê xe");
+                        Log.d("RentVehicle", "Không có thông tin thuê xe");
                         showEmptyView();
                     }
                 } else {
-                    Log.d("RentVehicle", "Không có thông tin thuê xe");
+                    Log.d("RentVehicle", "Không có đơn thuê xe đang hoạt động");
                     showEmptyView();
+                    loadRentHistory(currentUser.getMaND());
                 }
             } else {
                 Log.d("RentVehicle", "Không có thông tin thuê xe");
@@ -510,7 +513,7 @@ public class FragmentUserRentVehicle extends Fragment {
             tvNgayBatDauDK.setText(details.getNgayBatDauDK());
             tvNgayKetThucDK.setText(details.getNgayKetThucDK());
             tvNgayBatDauTT.setText(details.getNgayBatDauTT());
-            tvNgayHienTai.setText(dateFormat.format(new Date()));
+            tvNgayHienTai.setText(new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault()).format(new Date()));
             int thanhTien = details.getThanhTien();
             int tienCoc = details.getTienCoc();
             int thucTra = thanhTien - tienCoc;
@@ -520,12 +523,21 @@ public class FragmentUserRentVehicle extends Fragment {
             ArrayAdapter<String> adapter = new ArrayAdapter<>(requireContext(),
                     android.R.layout.simple_dropdown_item_1line, paymentMethods);
             spinnerPhuongThuc.setAdapter(adapter);
+
+            // Cập nhật trạng thái thanh toán
             if (thanhToan != null) {
                 spinnerPhuongThuc.setText(thanhToan.getPhuongThuc(), false);
-                tvTrangThaiThanhToan.setText(getPaymentStatusText(thanhToan.getTrangThai()));
+                // Nếu là thanh toán tiền cọc và đã thanh toán thành công
+                if (thanhToan.getSoTien() == tienCoc && thanhToan.getTrangThai() == THANH_TOAN_DA_THANH_TOAN) {
+                    tvTrangThaiThanhToan.setText("Đã thanh toán tiền cọc");
+                } else if (thanhToan.getSoTien() == thucTra && thanhToan.getTrangThai() == THANH_TOAN_DA_THANH_TOAN) {
+                    tvTrangThaiThanhToan.setText("Đã thanh toán tiền thuê");
+                } else {
+                    tvTrangThaiThanhToan.setText(getPaymentStatusText(thanhToan.getTrangThai()));
+                }
             } else {
                 spinnerPhuongThuc.setText(details.getGhiChu(), false);
-                tvTrangThaiThanhToan.setText(getResources().getStringArray(R.array.trang_thai_thanh_toan)[1]);
+                tvTrangThaiThanhToan.setText(getResources().getStringArray(R.array.trang_thai_thanh_toan)[1]); // Chưa thanh toán
             }
             tvGhiChu.setText(details.getGhiChu());
 
@@ -559,9 +571,75 @@ public class FragmentUserRentVehicle extends Fragment {
             }
 
             scrollViewRentalInfo.setVisibility(View.VISIBLE);
+
+            // Cập nhật hiển thị button dựa trên trạng thái mới
+            updateButtonVisibility(rental, details);
         } catch (Exception e) {
             e.printStackTrace();
             showError("Có lỗi xảy ra khi hiển thị thông tin thuê xe");
+        }
+    }
+
+    private void updateButtonVisibility(ThueXe rental, ChiTietThueXe details) {
+        try {
+            // Lấy ngày hiện tại
+            Calendar cal = Calendar.getInstance();
+            cal.set(Calendar.HOUR_OF_DAY, 0);
+            cal.set(Calendar.MINUTE, 0);
+            cal.set(Calendar.SECOND, 0);
+            cal.set(Calendar.MILLISECOND, 0);
+            Date ngayHienTai = cal.getTime();
+
+            // Parse ngày bắt đầu dự kiến
+            Date ngayBatDauDK = inputDateFormat.parse(details.getNgayBatDauDK());
+            if (ngayBatDauDK != null) {
+                cal.setTime(ngayBatDauDK);
+                cal.set(Calendar.HOUR_OF_DAY, 0);
+                cal.set(Calendar.MINUTE, 0);
+                cal.set(Calendar.SECOND, 0);
+                cal.set(Calendar.MILLISECOND, 0);
+                ngayBatDauDK = cal.getTime();
+            }
+
+            // Parse ngày kết thúc dự kiến
+            Date ngayKetThucDK = inputDateFormat.parse(details.getNgayKetThucDK());
+            if (ngayKetThucDK != null) {
+                cal.setTime(ngayKetThucDK);
+                cal.set(Calendar.HOUR_OF_DAY, 0);
+                cal.set(Calendar.MINUTE, 0);
+                cal.set(Calendar.SECOND, 0);
+                cal.set(Calendar.MILLISECOND, 0);
+                ngayKetThucDK = cal.getTime();
+            }
+
+            // Ẩn tất cả các button trước
+            btnDungThue.setVisibility(View.GONE);
+            btnBatDauThue.setVisibility(View.GONE);
+            btnHuyThue.setVisibility(View.GONE);
+
+            // Trường hợp 1: Đang xử lý hoặc (Đang thuê và ngày bắt đầu > ngày hiện tại)
+            if (rental.getTrangThai() == TRANG_THAI_DANG_XU_LY || 
+                (rental.getTrangThai() == TRANG_THAI_DANG_THUE && ngayBatDauDK.after(ngayHienTai))) {
+                // Chỉ hiển thị nút Hủy thuê
+                btnHuyThue.setVisibility(View.VISIBLE);
+                btnBatDauThue.setVisibility(View.GONE);
+                btnDungThue.setVisibility(View.GONE);
+            }
+            // Trường hợp 2: Đang thuê và trong thời gian thuê
+            else if (rental.getTrangThai() == TRANG_THAI_DANG_THUE && 
+                     !ngayBatDauDK.after(ngayHienTai) && 
+                     !ngayHienTai.after(ngayKetThucDK)) {
+                // Hiển thị cả 2 nút Bắt đầu thuê và Dừng thuê
+                btnBatDauThue.setVisibility(View.VISIBLE);
+                btnDungThue.setVisibility(View.VISIBLE);
+            }
+
+            Log.d(TAG, "Button visibility updated - Huy: " + btnHuyThue.getVisibility() + 
+                       ", BatDau: " + btnBatDauThue.getVisibility() + 
+                       ", Dung: " + btnDungThue.getVisibility());
+        } catch (Exception e) {
+            Log.e(TAG, "Error updating button visibility: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -656,17 +734,27 @@ public class FragmentUserRentVehicle extends Fragment {
 
     private void handleStopRental() {
         try {
-            String paymentMethod = spinnerPhuongThuc.getText().toString();
-            if (paymentMethod.equals("Tiền mặt")) {
-                handleCashStopRental();
-            } else {
-                // Xử lý dừng thuê với ZaloPay (nếu cần)
-                Toast.makeText(requireContext(), "Chức năng này chỉ hỗ trợ thanh toán tiền mặt", Toast.LENGTH_SHORT).show();
+            if (currentRentalId == -1) {
+                Toast.makeText(requireContext(), "Không tìm thấy thông tin thuê xe", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            // Cập nhật ngày kết thúc thực tế
+            ChiTietThueXe chiTiet = chiTietThueXeDAO.getSingleByMaThueXe(currentRentalId);
+            if (chiTiet != null) {
+                String ngayKetThucTT = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault()).format(new Date());
+                chiTiet.setNgayKetThucTT(ngayKetThucTT);
+                chiTietThueXeDAO.update(chiTiet);
+                
+                // Cập nhật UI
+                Toast.makeText(requireContext(), "Đã cập nhật thời gian kết thúc thuê", Toast.LENGTH_SHORT).show();
+                
+                // Tính toán và hiển thị thanh toán
+                calculateAndShowPayment(chiTiet);
             }
         } catch (Exception e) {
-            Log.e("StopRental", "Error in handleStopRental: " + e.getMessage());
-            e.printStackTrace();
-            Toast.makeText(requireContext(), "Có lỗi xảy ra khi dừng thuê xe: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+            Log.e(TAG, "Error stopping rental: " + e.getMessage());
+            Toast.makeText(requireContext(), "Có lỗi xảy ra khi dừng thuê xe", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -685,7 +773,7 @@ public class FragmentUserRentVehicle extends Fragment {
             }
 
             // Cập nhật trạng thái thuê xe thành "Đang xử lý"
-            currentRental.setTrangThai(1); // 1 = Đang xử lý
+            currentRental.setTrangThai(TRANG_THAI_DANG_XU_LY);
             int updateResult = thueXeDAO.update(currentRental);
             Log.d("StopRental", "Updated rental status result: " + updateResult);
 
@@ -707,7 +795,7 @@ public class FragmentUserRentVehicle extends Fragment {
             thanhToan.setNoiDung("Thanh toán tiền thuê xe - Dừng thuê");
             thanhToan.setNgayThucHien(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(new Date()));
             thanhToan.setPhuongThuc("Tiền mặt");
-            thanhToan.setTrangThai(2); // 2 = Đang xử lý
+            thanhToan.setTrangThai(TRANG_THAI_DA_TRA);
             thanhToan.setGhiChu("Thanh toán khi dừng thuê xe");
 
             long thanhToanId = thanhToanDAO.insert(thanhToan);
@@ -735,7 +823,7 @@ public class FragmentUserRentVehicle extends Fragment {
                     // Hiển thị thông báo thanh toán
                     PaymentNotification paymentNotiFragment = new PaymentNotification();
                     Bundle bundle = new Bundle();
-                    bundle.putString("result", "Đang xử lý");
+                    bundle.putString("result", "Đã thanh toán");
                     bundle.putString("subMessage", "Vui lòng đợi xác nhận từ nhân viên");
                     bundle.putBoolean("isStopRental", true);
                     bundle.putInt("maThueXe", currentRental.getMaThueXe());
@@ -814,35 +902,30 @@ public class FragmentUserRentVehicle extends Fragment {
         try {
             // Parse các giá trị tiền tệ
             int thanhTien = parseCurrencyString(tvThanhTien.getText().toString());
-            int tienCoc = parseCurrencyString(tvTienCoc.getText().toString());
+            
+            // Xác định loại thanh toán dựa vào bundle arguments
+            Bundle args = getArguments();
+            isDepositPayment = args != null && args.getBoolean("isFromHomepage", false);
+            
+            // Tính toán số tiền cần thanh toán
+            int tienCoc = isDepositPayment ? (int)(thanhTien * 0.3) : parseCurrencyString(tvTienCoc.getText().toString());
+            int amountToPay = isDepositPayment ? tienCoc : (thanhTien - tienCoc);
 
-            Log.d("Payment", "Parsed thanhTien: " + thanhTien);
-            Log.d("Payment", "Parsed tienCoc: " + tienCoc);
-
-            if (thanhTien <= 0) {
-                Toast.makeText(requireContext(), "Số tiền thanh toán không hợp lệ", Toast.LENGTH_SHORT).show();
-                return;
-            }
-
-            if (tienCoc < 0) {
-                Toast.makeText(requireContext(), "Số tiền cọc không hợp lệ", Toast.LENGTH_SHORT).show();
-                return;
-            }
-
-            int finalAmount = thanhTien - tienCoc;
-            if (finalAmount < 0) {
+            if (amountToPay <= 0) {
                 Toast.makeText(requireContext(), "Số tiền thanh toán không hợp lệ", Toast.LENGTH_SHORT).show();
                 return;
             }
 
             // Save payment transaction
             long appTransId = System.currentTimeMillis();
-            savePaymentTransaction(String.valueOf(finalAmount), "Tiền mặt", "Đang xử lý", String.valueOf(appTransId), String.valueOf(appTransId));
-
+            
+            // Tạo đơn thuê xe với trạng thái tương ứng
             ThueXe thueXe = new ThueXe();
             thueXe.setMaND(currentUser.getMaND());
             thueXe.setNgayDat(ThueXeUtility.getCurrentDate());
-            thueXe.setTrangThai(0); // Đang thuê
+            // Nếu là thanh toán tiền cọc -> trạng thái "Đang xử lý"
+            // Nếu là thanh toán tiền thuê -> trạng thái "Đang thuê"
+            thueXe.setTrangThai(isDepositPayment ? TRANG_THAI_DANG_XU_LY : TRANG_THAI_DANG_THUE);
 
             Log.d("Cash", "Creating rental record for user: " + currentUser.getMaND());
             long maThueXe = thueXeDAO.insert(thueXe);
@@ -857,50 +940,38 @@ public class FragmentUserRentVehicle extends Fragment {
                 chiTiet.setNgayBatDauTT(tvNgayBatDauTT.getText().toString());
                 chiTiet.setNgayKetThucTT(tvNgayHienTai.getText().toString());
                 chiTiet.setTienCoc(tienCoc);
-                chiTiet.setThanhTien(totalAmount);
-                chiTiet.setGhiChu("Thanh toán qua tiền mặt");
+                chiTiet.setThanhTien(thanhTien);
+                chiTiet.setGhiChu("Thanh toán " + (isDepositPayment ? "tiền cọc" : "tiền thuê") + " qua tiền mặt");
 
                 Log.d("Cash", "Creating rental details for maThueXe: " + maThueXe);
                 long result = chiTietThueXeDAO.insert(chiTiet);
                 Log.d("Cash", "Rental details created with result: " + result);
 
                 if (result > 0) {
+                    // Cập nhật trạng thái xe thành "Đang thuê" trong cả 2 trường hợp
                     Log.d("Cash", "Updating vehicle status for maXe: " + selectedXe.getMaXe());
-                    xeDAO.updateStatus(selectedXe.getMaXe(), 1);
+                    xeDAO.updateStatus(selectedXe.getMaXe(), 1); // 1 = Đang thuê
+
+                    // Lưu thông tin thanh toán với trạng thái "Đang xử lý"
+                    savePaymentTransaction(
+                        String.valueOf(amountToPay), 
+                        "Tiền mặt",
+                        "Đã thanh toán",
+                        String.valueOf(appTransId),
+                        String.valueOf(appTransId)
+                    );
 
                     Log.d("Cash", "Updating payment record with maThueXe: " + maThueXe);
                     ThanhToan payment = thanhToanDAO.getByMaGiaoDich(String.valueOf(appTransId));
                     if (payment != null) {
                         payment.setMaThueXe((int) maThueXe);
+                        payment.setTrangThai(THANH_TOAN_DA_THANH_TOAN); // Cập nhật trạng thái thành "Đã thanh toán"
+                        payment.setNgayThanhCong(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(new Date()));
                         int updateResult = thanhToanDAO.update(payment);
                         Log.d("Cash", "Payment record updated with result: " + updateResult);
                     } else {
                         Log.e("Cash", "Payment record not found for appTransId: " + appTransId);
                     }
-
-                    // Chuyển sang màn hình thông báo
-                    Log.d("Navigation", "Preparing to show payment notification");
-                    PaymentNotification paymentNotiFragment = new PaymentNotification();
-                    Bundle bundle = new Bundle();
-                    bundle.putString("result", "Đã thanh toán");
-                    bundle.putString("transactionId", String.valueOf(appTransId));
-                    bundle.putString("appTransId", String.valueOf(appTransId));
-                    paymentNotiFragment.setArguments(bundle);
-
-                    // Đảm bảo container hiển thị trước khi thực hiện transaction
-                    View container = requireActivity().findViewById(R.id.user_rent_vehicle_container);
-                    if (container != null) {
-                        container.setVisibility(View.VISIBLE);
-                    }
-
-                    // Clear back stack before adding new fragment
-                    getChildFragmentManager().popBackStackImmediate(null, androidx.fragment.app.FragmentManager.POP_BACK_STACK_INCLUSIVE);
-
-                    Log.d("Navigation", "Executing fragment transaction");
-                    FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
-                    transaction.replace(R.id.user_rent_vehicle_container, paymentNotiFragment);
-                    transaction.commit();
-                    Log.d("Navigation", "Fragment transaction completed");
                 }
             }
         } catch (Exception e) {
@@ -914,8 +985,13 @@ public class FragmentUserRentVehicle extends Fragment {
         try {
             // Parse các giá trị tiền tệ
             int thanhTien = parseCurrencyString(tvThanhTien.getText().toString());
-            int tienCoc = parseCurrencyString(tvTienCoc.getText().toString());
-            int finalAmount = thanhTien - tienCoc;
+            
+            // Xác định loại thanh toán
+            Bundle args = getArguments();
+            isDepositPayment = args != null && args.getBoolean("isFromHomepage", false);
+            
+            int tienCoc = isDepositPayment ? (int)(thanhTien * 0.3) : parseCurrencyString(tvTienCoc.getText().toString());
+            int finalAmount = isDepositPayment ? tienCoc : (thanhTien - tienCoc);
 
             Log.d("ZaloPay", "Parsed thanhTien: " + thanhTien);
             Log.d("ZaloPay", "Parsed tienCoc: " + tienCoc);
@@ -955,14 +1031,42 @@ public class FragmentUserRentVehicle extends Fragment {
                         case 1:
                             if (data.has("zptranstoken")) {
                                 String token = data.getString("zptranstoken");
+                                String appTransId = data.getString("apptransid");
                                 Log.d("ZaloPay", "Token: " + token);
+                                
+                                // Lưu payment record với trạng thái "Processing" trước khi gọi ZaloPay
+                                savePaymentTransaction(
+                                    String.valueOf(finalAmount),
+                                    "ZaloPay",
+                                    "Processing",
+                                    null,
+                                    appTransId
+                                );
+
                                 ZaloPaySDK.getInstance().payOrder(requireActivity(), token, "demozpdk://app", new PayOrderListener() {
                                     @Override
                                     public void onPaymentSucceeded(String transactionId, String transToken, String appTransId) {
                                         Log.d("ZaloPay", "Payment succeeded - transactionId: " + transactionId + ", appTransId: " + appTransId);
 
-                                        // Save payment transaction
-                                        savePaymentTransaction(String.valueOf(finalAmount), "ZaloPay", "Đã thanh toán", transactionId, appTransId);
+                                        // Cập nhật payment record với trạng thái "Đã thanh toán"
+                                        ThanhToan payment = thanhToanDAO.getByMaGiaoDich(appTransId);
+                                        if (payment != null) {
+                                            payment.setTrangThai(THANH_TOAN_DA_THANH_TOAN);
+                                            payment.setMaGiaoDich(transactionId);
+                                            payment.setNgayThanhCong(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(new Date()));
+                                            int updateResult = thanhToanDAO.update(payment);
+                                            Log.d("ZaloPay", "Payment status updated with result: " + updateResult);
+                                        } else {
+                                            Log.e("ZaloPay", "Payment record not found for appTransId: " + appTransId);
+                                            // Nếu không tìm thấy payment record, tạo mới
+                                            savePaymentTransaction(
+                                                String.valueOf(finalAmount),
+                                                "ZaloPay",
+                                                String.valueOf(THANH_TOAN_DA_THANH_TOAN),
+                                                transactionId,
+                                                appTransId
+                                            );
+                                        }
 
                                         ThueXe thueXe = new ThueXe();
                                         thueXe.setMaND(currentUser.getMaND());
@@ -979,13 +1083,12 @@ public class FragmentUserRentVehicle extends Fragment {
                                             chiTiet.setMaXe(selectedXe.getMaXe());
                                             chiTiet.setNgayBatDauDK(tvNgayBatDauDK.getText().toString());
                                             chiTiet.setNgayKetThucDK(tvNgayKetThucDK.getText().toString());
-                                            chiTiet.setNgayBatDauTT(tvNgayBatDauTT.getText().toString());
-                                            chiTiet.setNgayKetThucTT(tvNgayHienTai.getText().toString());
+                                            chiTiet.setNgayBatDauTT(tvNgayBatDauDK.getText().toString());
+                                            chiTiet.setNgayKetThucTT(tvNgayKetThucDK.getText().toString());
                                             chiTiet.setTienCoc(tienCoc);
-                                            chiTiet.setThanhTien(totalAmount);
-                                            chiTiet.setGhiChu("Thanh toán qua ZaloPay");
+                                            chiTiet.setThanhTien(thanhTien);
+                                            chiTiet.setGhiChu("Thanh toán " + (isDepositPayment ? "tiền cọc" : "tiền thuê") + " qua ZaloPay");
 
-                                            Log.d("ZaloPay", "Creating rental details for maThueXe: " + maThueXe);
                                             long result = chiTietThueXeDAO.insert(chiTiet);
                                             Log.d("ZaloPay", "Rental details created with result: " + result);
 
@@ -993,93 +1096,81 @@ public class FragmentUserRentVehicle extends Fragment {
                                                 Log.d("ZaloPay", "Updating vehicle status for maXe: " + selectedXe.getMaXe());
                                                 xeDAO.updateStatus(selectedXe.getMaXe(), 1);
 
-                                                Log.d("ZaloPay", "Updating payment record with maThueXe: " + maThueXe);
-                                                ThanhToan payment = thanhToanDAO.getByMaGiaoDich(appTransId);
+                                                // Cập nhật mã thuê xe cho payment record
+                                                payment = thanhToanDAO.getByMaGiaoDich(appTransId);
                                                 if (payment != null) {
                                                     payment.setMaThueXe((int) maThueXe);
+                                                    payment.setTrangThai(THANH_TOAN_DA_THANH_TOAN); // Cập nhật trạng thái thành "Đã thanh toán"
+                                                    payment.setNgayThanhCong(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(new Date()));
                                                     int updateResult = thanhToanDAO.update(payment);
                                                     Log.d("ZaloPay", "Payment record updated with result: " + updateResult);
-                                                } else {
-                                                    Log.e("ZaloPay", "Payment record not found for appTransId: " + appTransId);
                                                 }
+
+                                                // Hiển thị thông báo thành công
+                                                requireActivity().runOnUiThread(() -> {
+                                                    PaymentNotification paymentNotiFragment = new PaymentNotification();
+                                                    Bundle bundle = new Bundle();
+                                                    bundle.putString("result", "Đã thanh toán");
+                                                    bundle.putString("transactionId", transactionId);
+                                                    bundle.putString("appTransId", appTransId);
+                                                    bundle.putString("subMessage", isDepositPayment ? 
+                                                        "Thanh toán tiền cọc thành công" : 
+                                                        "Thanh toán tiền thuê thành công");
+                                                    paymentNotiFragment.setArguments(bundle);
+
+                                                    FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
+                                                    transaction.replace(R.id.user_rent_vehicle_container, paymentNotiFragment);
+                                                    transaction.commit();
+                                                });
                                             } else {
                                                 Log.e("ZaloPay", "Failed to create rental details");
+                                                Toast.makeText(requireContext(), "Có lỗi xảy ra khi tạo chi tiết thuê xe", Toast.LENGTH_SHORT).show();
                                             }
                                         } else {
                                             Log.e("ZaloPay", "Failed to create rental record");
+                                            Toast.makeText(requireContext(), "Có lỗi xảy ra khi tạo đơn thuê xe", Toast.LENGTH_SHORT).show();
                                         }
-
-                                        PaymentNotification paymentNotiFragment = new PaymentNotification();
-                                        Bundle bundle = new Bundle();
-                                        bundle.putString("result", "Đã thanh toán");
-                                        bundle.putString("transactionId", transactionId);
-                                        bundle.putString("appTransId", appTransId);
-                                        paymentNotiFragment.setArguments(bundle);
-
-                                        FragmentTransaction transaction = requireActivity().getSupportFragmentManager().beginTransaction();
-                                        transaction.replace(R.id.user_rent_vehicle_container, paymentNotiFragment);
-                                        transaction.addToBackStack(null);
-                                        transaction.commit();
                                     }
 
                                     @Override
                                     public void onPaymentCanceled(String zpTransToken, String appTransId) {
                                         Log.d("ZaloPay", "Payment canceled - zpTransToken: " + zpTransToken);
 
-                                        String amount = tvThanhTien.getText().toString();
-                                        String paymentMethod = spinnerPhuongThuc.getText().toString();
-                                        savePaymentTransaction(amount, paymentMethod, "Chưa thanh toán", null, null);
+                                        // Cập nhật payment record với trạng thái "Chưa thanh toán"
+                                        ThanhToan payment = thanhToanDAO.getByMaGiaoDich(appTransId);
+                                        if (payment != null) {
+                                            payment.setTrangThai(THANH_TOAN_CHUA_THANH_TOAN);
+                                            thanhToanDAO.update(payment);
+                                        }
 
                                         PaymentNotification paymentNotiFragment = new PaymentNotification();
                                         Bundle bundle = new Bundle();
                                         bundle.putString("result", "Chưa thanh toán");
                                         paymentNotiFragment.setArguments(bundle);
 
-                                        FragmentTransaction transaction = requireActivity().getSupportFragmentManager().beginTransaction();
+                                        FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
                                         transaction.replace(R.id.user_rent_vehicle_container, paymentNotiFragment);
                                         transaction.addToBackStack(null);
                                         transaction.commit();
-
-                                        View container = requireActivity().findViewById(R.id.user_rent_vehicle_container);
-                                        if (container != null) {
-                                            container.setVisibility(View.GONE);
-                                        }
-
-                                        TextView tvWelcome = requireActivity().findViewById(R.id.tv_welcome);
-                                        AutoCompleteTextView tvSearch = requireActivity().findViewById(R.id.tv_search);
-                                        AutoCompleteTextView spinnerVehicleType = requireActivity().findViewById(R.id.spinner_vehicle_type);
-                                        AutoCompleteTextView spinnerStatus = requireActivity().findViewById(R.id.spinner_status);
-                                        Button btnClearFilter = requireActivity().findViewById(R.id.btn_clear_filter);
-                                        RecyclerView recyclerView = requireActivity().findViewById(R.id.vehicle_list);
-
-                                        if (tvWelcome != null)
-                                            tvWelcome.setVisibility(View.VISIBLE);
-                                        if (tvSearch != null)
-                                            tvSearch.setVisibility(View.VISIBLE);
-                                        if (spinnerVehicleType != null)
-                                            spinnerVehicleType.setVisibility(View.VISIBLE);
-                                        if (spinnerStatus != null)
-                                            spinnerStatus.setVisibility(View.VISIBLE);
-                                        if (btnClearFilter != null)
-                                            btnClearFilter.setVisibility(View.VISIBLE);
-                                        if (recyclerView != null)
-                                            recyclerView.setVisibility(View.VISIBLE);
                                     }
 
                                     @Override
                                     public void onPaymentError(ZaloPayError zaloPayError, String zpTransToken, String appTransId) {
                                         Log.d("ZaloPay", "Payment error - " + zaloPayError.toString());
 
-                                        String amount = tvThanhTien.getText().toString();
-                                        String paymentMethod = spinnerPhuongThuc.getText().toString();
-                                        savePaymentTransaction(amount, paymentMethod, "Thất bại", null, null);
+                                        // Cập nhật payment record với trạng thái "Thất bại"
+                                        ThanhToan payment = thanhToanDAO.getByMaGiaoDich(appTransId);
+                                        if (payment != null) {
+                                            payment.setTrangThai(THANH_TOAN_THAT_BAI);
+                                            thanhToanDAO.update(payment);
+                                        }
 
                                         PaymentNotification paymentNotiFragment = new PaymentNotification();
                                         Bundle bundle = new Bundle();
                                         bundle.putString("result", "Thất bại");
                                         paymentNotiFragment.setArguments(bundle);
 
-                                        FragmentTransaction transaction = requireActivity().getSupportFragmentManager().beginTransaction();
+                                        FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
                                         transaction.replace(R.id.user_rent_vehicle_container, paymentNotiFragment);
                                         transaction.addToBackStack(null);
                                         transaction.commit();
@@ -1165,7 +1256,7 @@ public class FragmentUserRentVehicle extends Fragment {
             // Cập nhật trạng thái thuê xe thành "Đã trả"
             ThueXe thueXe = thueXeDAO.getById(maThueXe);
             if (thueXe != null) {
-                thueXe.setTrangThai(2); // 2 = Đã trả
+                thueXe.setTrangThai(TRANG_THAI_DA_TRA);
                 int updateRentalResult = thueXeDAO.update(thueXe);
                 Log.d("UpdateStatus", "Updated rental status result: " + updateRentalResult);
             }
@@ -1248,20 +1339,8 @@ public class FragmentUserRentVehicle extends Fragment {
 
             // Cập nhật trạng thái
             if (tvTrangThaiThanhToan != null) {
-                String trangThai;
-                switch (thueXe.getTrangThai()) {
-                    case 0:
-                        trangThai = "Đang thuê";
-                        break;
-                    case 1:
-                        trangThai = "Đã trả";
-                        break;
-                    case 2:
-                        trangThai = "Đã hủy";
-                        break;
-                    default:
-                        trangThai = "Không xác định";
-                }
+                String[] trangThaiArray = getResources().getStringArray(R.array.trang_thai_thue_xe);
+                String trangThai = trangThaiArray[thueXe.getTrangThai()];
                 tvTrangThaiThanhToan.setText(trangThai);
             }
         } catch (Exception e) {
@@ -1271,6 +1350,174 @@ public class FragmentUserRentVehicle extends Fragment {
     }
 
     public void refreshRentalInfo() {
-        loadLatestRentalInfo();
+        try {
+            // Clear current data
+            if (currentUser != null) {
+                // Refresh rental info
+                loadLatestRentalInfo();
+                
+                // Refresh history if showing
+                if (recyclerViewLichSuThue != null && recyclerViewLichSuThue.getVisibility() == View.VISIBLE) {
+                    loadRentHistory(currentUser.getMaND());
+                }
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "Error refreshing rental info: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    private void handleCancelRental() {
+        try {
+            if (currentRentalId == -1 || selectedXe == null) {
+                Toast.makeText(requireContext(), "Không tìm thấy thông tin thuê xe", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            // Hiển thị dialog xác nhận
+            new AlertDialog.Builder(requireContext())
+                .setTitle("Xác nhận hủy")
+                .setMessage("Bạn có chắc chắn muốn hủy đơn thuê xe này không?")
+                .setPositiveButton("Có", (dialog, which) -> {
+                    try {
+                        // 1. Cập nhật trạng thái đơn thuê xe thành Hủy
+                        ThueXe currentRental = thueXeDAO.getById(currentRentalId);
+                        if (currentRental != null) {
+                            Log.d(TAG, "Updating rental status to CANCELLED for rental ID: " + currentRentalId);
+                            currentRental.setTrangThai(TRANG_THAI_HUY);
+                            int rentalUpdateResult = thueXeDAO.update(currentRental);
+                            Log.d(TAG, "Rental status update result: " + rentalUpdateResult);
+                            
+                            if (rentalUpdateResult <= 0) {
+                                Log.e(TAG, "Failed to update rental status");
+                                Toast.makeText(requireContext(), "Không thể cập nhật trạng thái đơn thuê xe", Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+                        }
+
+                        // 2. Cập nhật trạng thái xe thành Hiện còn
+                        Log.d(TAG, "Updating vehicle status to AVAILABLE for vehicle ID: " + selectedXe.getMaXe());
+                        int vehicleUpdateResult = xeDAO.updateStatus(selectedXe.getMaXe(), 0); // 0 = Hiện còn
+                        Log.d(TAG, "Vehicle status update result: " + vehicleUpdateResult);
+                        
+                        if (vehicleUpdateResult <= 0) {
+                            Log.e(TAG, "Failed to update vehicle status");
+                            Toast.makeText(requireContext(), "Không thể cập nhật trạng thái xe", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+
+                        // 3. Cập nhật trạng thái đơn thanh toán thành Thất bại
+                        ThanhToan thanhToan = thanhToanDAO.getByMaThueXe(currentRentalId);
+                        if (thanhToan != null) {
+                            Log.d(TAG, "Updating payment status to FAILED for rental ID: " + currentRentalId);
+                            thanhToan.setTrangThai(THANH_TOAN_THAT_BAI);
+                            int paymentUpdateResult = thanhToanDAO.update(thanhToan);
+                            Log.d(TAG, "Payment status update result: " + paymentUpdateResult);
+                        }
+
+                        // 4. Hiển thị view không có đơn thuê xe và refresh dữ liệu
+                        showEmptyView();
+                        loadRentHistory(currentUser.getMaND());
+                        Toast.makeText(requireContext(), "Đã hủy đơn thuê xe thành công", Toast.LENGTH_SHORT).show();
+
+                        // 5. Refresh lại view
+                        showEmptyView();
+                        loadRentHistory(currentUser.getMaND());
+                        refreshRentalInfo();
+                    } catch (Exception e) {
+                        Log.e(TAG, "Error in cancel rental process: " + e.getMessage());
+                        e.printStackTrace();
+                        Toast.makeText(requireContext(), "Có lỗi xảy ra khi hủy đơn thuê xe: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .setNegativeButton("Không", null)
+                .show();
+
+        } catch (Exception e) {
+            Log.e(TAG, "Error showing cancel dialog: " + e.getMessage());
+            Toast.makeText(requireContext(), "Có lỗi xảy ra khi hủy đơn thuê xe", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void handleStartRental() {
+        try {
+            if (currentRentalId == -1) {
+                Toast.makeText(requireContext(), "Không tìm thấy thông tin thuê xe", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            // Cập nhật ngày bắt đầu thực tế
+            ChiTietThueXe chiTiet = chiTietThueXeDAO.getSingleByMaThueXe(currentRentalId);
+            if (chiTiet != null) {
+                String ngayBatDauTT = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault()).format(new Date());
+                chiTiet.setNgayBatDauTT(ngayBatDauTT);
+                chiTietThueXeDAO.update(chiTiet);
+                
+                // Cập nhật UI
+                tvNgayBatDauTT.setText(ngayBatDauTT);
+                Toast.makeText(requireContext(), "Đã cập nhật thời gian bắt đầu thuê", Toast.LENGTH_SHORT).show();
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "Error starting rental: " + e.getMessage());
+            Toast.makeText(requireContext(), "Có lỗi xảy ra khi bắt đầu thuê xe", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void calculateAndShowPayment(ChiTietThueXe chiTiet) {
+        try {
+            // Parse ngày bắt đầu và kết thúc thực tế
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault());
+            Date startDate = sdf.parse(chiTiet.getNgayBatDauTT());
+            Date endDate = sdf.parse(chiTiet.getNgayKetThucTT());
+
+            if (startDate != null && endDate != null) {
+                // Tính số ngày thuê (làm tròn lên)
+                long diffInMillies = Math.abs(endDate.getTime() - startDate.getTime());
+                int days = (int) Math.ceil(diffInMillies / (1000.0 * 60 * 60 * 24));
+                if (days == 0) days = 1; // Minimum 1 day
+
+                // Tính tổng tiền
+                int giaThueNgay = selectedXe.getGiaThue();
+                totalAmount = giaThueNgay * days;
+
+                // Cập nhật thành tiền trong chi tiết thuê xe
+                chiTiet.setThanhTien(totalAmount);
+                chiTietThueXeDAO.update(chiTiet);
+
+                // Cập nhật UI
+                tvThanhTien.setText(String.format(Locale.getDefault(), "%,d VNĐ", totalAmount));
+                int tienCoc = chiTiet.getTienCoc();
+                int thucTra = totalAmount - tienCoc;
+                tvThucTra.setText(String.format(Locale.getDefault(), "%,d VNĐ", thucTra));
+
+                // Hiển thị dialog xác nhận thanh toán
+                showPaymentConfirmationDialog(thucTra);
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "Error calculating payment: " + e.getMessage());
+            Toast.makeText(requireContext(), "Có lỗi xảy ra khi tính tiền thuê xe", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void showPaymentConfirmationDialog(int amount) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+        builder.setTitle("Xác nhận thanh toán")
+               .setMessage(String.format(Locale.getDefault(), "Số tiền cần thanh toán: %,d VNĐ\nBạn có muốn thanh toán ngay không?", amount))
+               .setPositiveButton("Thanh toán ngay", (dialog, which) -> handleCashStopRental())
+               .setNegativeButton("Để sau", (dialog, which) -> dialog.dismiss())
+               .show();
+    }
+
+    private boolean validateRentalData(ThueXe rental, ChiTietThueXe details) {
+        return rental != null && details != null;
+        // Thêm các điều kiện kiểm tra khác
+    }
+
+
+    private void handleError(String operation, Exception e) {
+        Log.e(TAG, "Error in " + operation + ": " + e.getMessage());
+        Toast.makeText(requireContext(),
+                "Có lỗi xảy ra khi " + operation + ": " + e.getMessage(),
+                Toast.LENGTH_SHORT).show();
     }
 }
