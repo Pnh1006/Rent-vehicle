@@ -1,0 +1,227 @@
+<resources>
+    <string name="app_name">PNH</string>
+
+    <!--    Sign in xml     -->
+    <string name="dang_nhap">Đăng nhập</string>
+    <string name="so_dien_thoai">Số điện thoại</string>
+    <string name="mat_khau">Mật khẩu</string>
+    <string name="ban_chua_co_tai_khoan">Bạn chưa có tài khoản?</string>
+    <string name="dang_ky">Đăng ký</string>
+    <string name="ho_ten">Họ tên</string>
+    <string name="nhap_ho_ten">Nhập họ tên</string>
+    <string name="nhap_so_dien_thoai">Nhập số điện thoại</string>
+    <string name="cccd">CCCD</string>
+    <string name="nhap_so_cccd">Nhập CCCD</string>
+    <string name="gioi_tinh">Giới tính</string>
+    <string name="nam">Nam</string>
+    <string name="nu">Nữ</string>
+    <string name="khac">Khác</string>
+    <string name="ngay_sinh">Ngày sinh</string>
+    <string name="nhap_ngay_sinh">Nhập ngày sinh</string>
+    <string name="chon_ngay_sinh">Chọn ngày sinh</string>
+    <string name="nhap_mat_khau">Nhập mật khẩu</string>
+    <string name="nhap_lai_mat_khau">Nhập lại mật khẩu</string>
+    <string name="nhap_mat_khau_cu">Nhập mật khẩu cũ</string>
+    <string name="nhap_lai_mat_khau_moi">Nhập lại mật khẩu mới</string>
+    <string name="nhap_mat_khau_moi">Nhập mật khẩu mới</string>
+    <string name="ban_da_co_tai_khoan">Bạn đã có tài khoản?</string>
+    <string name="hint_search">Nhập tên xe </string>
+    <string name="phi_thue_xe_hien_tai">Phí thuê xe hiện tại</string>
+    <string name="thoi_gian_con_lai">Thời gian còn lại</string>
+    <string name="ket_thuc_thue">Dừng thuê xe </string>
+    <string name="thanh_toan_tien_coc">Thanh toán tiền cọc</string>
+    <string name="huy_thue">Huỷ thuê</string>
+    <string name="cho_xac_nhan">Chờ xác nhận</string>
+    <string name="thanh_toan_thanh_cong">Thanh toán thành công</string>
+    <string name="thanh_toan_that_bai">Thanh toán thất bại</string>
+    <string name="don_thanh_toan_dang_duyet">Đơn thanh toán đang được duyệt</string>
+    <string name="doi_mat_khau">Đổi mật khẩu</string>
+    <string name="thong_bao_doi_mat_khau">Vui lòng nhập thông tin để đổi mật khẩu</string>
+    <string name="chon_anh_tu_thiet_bi">Chọn ảnh từ thiết bị</string>
+    <string name="khong_thue_xe">Bạn chưa có xe nào đang thuê</string>
+    <string name="khong_co_thue_xe">Không có thông tin thuê xe</string>
+    <string name="lich_su_thue_xe">Lịch sử thuê xe</string>
+    <string name="thanh_toan_thue_xe">Thanh toán thuê xe</string>
+    <string name="quay_ve_trang_chu">Quay về trang chủ</string>
+    <string name="xem_thong_tin_thue_xe">Xem thông tin thuê xe</string>
+    <string name="xem_thong_tin_giao_dich">Xem thông tin giao dịch</string>
+    <string name="xem_chi_tiet">Xem chi tiết</string>
+    <string name="cam_on">Cảm ơn bạn đã sử dụng dịch vụ</string>
+    <string name="thu_lai">Vui lòng thử lại hoặc liên hệ hỗ trợ</string>
+    <string name="giao_dich_thanh_cong">Giao dịch đã được xử lý thành công</string>
+    <string name="danh_sach_xe">Danh sách xe</string>
+
+    <!-- NGUOIDUNG Table -->
+    <string name="ma_nd">Mã người dùng</string>
+    <string name="sdt">Số điện thoại</string>
+    <string name="ngay_dang_ky">Ngày đăng ký</string>
+    <string name="vai_tro">Vai trò</string>
+    <string name="trang_thai">Trạng thái</string>
+
+    <!-- XE Table -->
+    <string name="ma_xe">Mã xe</string>
+    <string name="ten_xe">Tên xe</string>
+    <string name="bien_so">Biển số</string>
+    <string name="hinh_anh">Hình ảnh</string>
+    <string name="gia_thue">Giá thuê</string>
+    <string name="nam_sx">Năm sản xuất</string>
+    <string name="mau_sac">Màu sắc</string>
+    <string name="loai_xe">Loại xe</string>
+    <string name="trang_thai_xe">Trạng thái xe</string>
+
+    <!-- THUEXE Table -->
+    <string name="ma_thue_xe">Mã thuê xe</string>
+    <string name="ma_nd_thue">Mã người dùng</string>
+    <string name="ngay_dat">Ngày đặt</string>
+    <string name="trang_thai_thue">Trạng thái thuê</string>
+
+    <!-- CHITIETTHUEXE Table -->
+    <string name="ma_chi_tiet">Mã chi tiết</string>
+    <string name="ma_thue_xe_chi_tiet">Mã thuê xe</string>
+    <string name="ma_xe_chi_tiet">Mã xe</string>
+    <string name="tien_coc">Tiền cọc</string>
+    <string name="ngay_bat_dau_dk">Ngày bắt đầu dự kiến</string>
+    <string name="ngay_ket_thuc_dk">Ngày kết thúc dự kiến</string>
+    <string name="ngay_bat_dau_tt">Ngày bắt đầu thuê</string>
+    <string name="ngay_ket_thuc_tt">Ngày kết thúc thuê</string>
+    <string name="ngay_hien_tai">Ngày hiện tại</string>
+    <string name="thanh_tien">Thành tiền</string>
+    <string name="so_tien_phai_tra">Thực trả</string>
+    <string name="ghi_chu_chi_tiet">Ghi chú</string>
+
+    <!-- THANHTOAN Table -->
+    <string name="ma_thanh_toan">Mã thanh toán</string>
+    <string name="ma_thue_xe_thanhtoan">Mã thuê xe</string>
+    <string name="ma_nd_thanhtoan">Mã người dùng</string>
+    <string name="so_tien">Số tiền</string>
+    <string name="chi_tiet_thanh_toan">Chi Tiết Thanh Toán</string>
+    <string name="thoi_gian_trang_thai">Thời Gian - Trạng Thái</string>
+    <string name="noi_dung_thanhtoan">Nội dung thanh toán</string>
+    <string name="ngay_thuc_hien">Ngày thực hiện</string>
+    <string name="ngay_thanh_cong">Ngày thành công</string>
+    <string name="phuong_thuc">Phương thức</string>
+    <string name="ma_giao_dich">Mã giao dịch</string>
+    <string name="ghi_chu_thanhtoan">Ghi chú</string>
+    <string name="trang_thai_thanhtoan">Trạng thái thanh toán</string>
+
+    <!--    Action    -->
+    <string name="them">Thêm</string>
+    <string name="sua">Sửa</string>
+    <string name="xoa">Xóa</string>
+    <string name="luu">Lưu</string>
+    <string name="huy">Hủy</string>
+    <string name="bo_loc">Bỏ lọc</string>
+    <string name="chi_tiet">Chi tiết</string>
+
+    <!--    Title   -->
+    <string name="chao_mung">Chào mừng bạn</string>
+    <string name="dang_xuat">Đăng xuất</string>
+    <string name="form_thue_xe">Form thuê xe</string>
+    <string name="form_nguoi_dung">Form người dùng</string>
+    <string name="form_xe">Form xe</string>
+    <string name="form_giao_dich">Form giao dịch</string>
+    <string name="trang_chu">Trang chủ</string>
+    <string name="thanh_toan">Thanh toán</string>
+    <string name="thue_xe">Thuê xe</string>
+    <string name="lich_su">Lịch sử</string>
+    <string name="cai_dat">Cài đặt</string>
+    <string name="tai_khoan">Tài khoản</string>
+    <string name="giao_dich">Giao dịch</string>
+    <string name="lich_su_giao_dich">Lịch sử giao dịch của bạn</string>
+    <string name="chua_co_giao_dich">Chưa có giao dịch nào</string>
+    <string name="xe">Xe</string>
+    <string name="quan_ly_tai_khoan">Quản lý tài khoản</string>
+    <string name="tim_kiem_tai_khoan">Tìm kiếm tài khoản</string>
+    <string name="khong_tim_thay_xe">Không tìm thấy xe phù hợp</string>
+    <string name="danh_sach_tai_khoan">Danh sách tài khoản</string>
+    <string name="quan_ly_giao_dich">Quản lý giao dịch</string>
+    <string name="quan_ly_xe">Quản lý xe</string>
+    <string name="quan_ly_thue_xe">Quản lý thuê xe</string>
+    <string name="thong_tin_khach_hang">Thông tin khách hàng</string>
+    <string name="dien_thong_tin_khach_hang">Vui lòng điền thông tin chính xác</string>
+    <string name="thong_tin_ca_nhan">Thông tin cá nhân</string>
+    <string name="thong_tin_xe">Thông tin xe</string>
+    <string name="thong_tin_he_thong">Thông tin hệ thống</string>
+    <string name="danh_sach_giao_dich">Danh sách giao dịch</string>
+    <string name="that_bai">Thất bại</string>
+    <string name="thanh_cong">Thành công</string>
+    <string name="tong_so">Tổng số</string>
+    <string name="thong_ke_giao_dich">Thống kê giao dịch</string>
+    <string name="thoi_gian_thue">Thời gian thuê</string>
+    <string name="thong_tin_thanh_toan">Thông tin thanh toán</string>
+    <string name="thong_tin_thanh_toan_coc">Thông tin thanh toán cọc</string>
+
+    <!-- Loại xe -->
+    <string-array name="loai_xe">
+        <item>Xe số</item>
+        <item>Xe ga</item>
+    </string-array>
+
+    <!-- Trạng thái xe -->
+    <string-array name="trang_thai_xe">
+        <item>Hiện còn</item>
+        <item>Đang thuê</item>
+    </string-array>
+
+    <!-- Năm sản xuất -->
+    <string-array name="nam_san_xuat">
+        <item>2019</item>
+        <item>2020</item>
+        <item>2021</item>
+        <item>2022</item>
+        <item>2023</item>
+        <item>2024</item>
+        <item>2025</item>
+    </string-array>
+
+    <!-- Màu sắc -->
+    <string-array name="mau_sac">
+        <item>Đỏ</item>
+        <item>Xanh dương</item>
+        <item>Đen</item>
+        <item>Trắng</item>
+        <item>Xám</item>
+    </string-array>
+
+    <!-- Giới tính -->
+    <string-array name="gioi_tinh">
+        <item>Nam</item>
+        <item>Nữ</item>
+        <item>Khác</item>
+    </string-array>
+
+    <!-- Trạng thái tài khoản -->
+    <string-array name="trang_thai_tai_khoan">
+        <item>Hoạt động</item>
+        <item>Bị khóa</item>
+    </string-array>
+
+    <!-- Vai trò tài khoản -->
+    <string-array name="vai_tro_tai_khoan">
+        <item>Người dùng</item>
+        <item>Quản trị viên</item>
+    </string-array>
+
+    <!-- Phương thức thanh toán -->
+    <string-array name="phuong_thuc_thanh_toan">
+        <item>Zalo pay</item>
+        <item>Tiền mặt</item>
+    </string-array>
+
+    <!-- Trạng thái thanh toán -->
+    <string-array name="trang_thai_thanh_toan">
+        <item>Đã thanh toán</item>
+        <item>Chưa thanh toán</item>
+        <item>Đang xử lý</item>
+        <item>Thất bại</item>
+    </string-array>
+
+    <!-- Trạng thái thuê xe -->
+    <string-array name="trang_thai_thue_xe">
+        <item>Đang thuê</item>
+        <item>Đã trả</item>
+        <item>Đang xử lý</item>
+        <item>Hủy</item>
+    </string-array>
+
+</resources>

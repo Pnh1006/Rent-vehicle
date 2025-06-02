@@ -1,0 +1,658 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/primary_background">
+
+    <FrameLayout
+        android:id="@+id/user_rent_vehicle_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone" />
+
+    <ScrollView
+        android:id="@+id/scrollViewRentalInfo"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:visibility="gone"
+        tools:ignore="UselessParent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="4dp"
+                app:strokeWidth="0dp">
+
+                <TextView
+                    android:id="@+id/title_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/title_font"
+                    android:gravity="center"
+                    android:padding="16dp"
+                    android:text="@string/thue_xe"
+                    android:textColor="@color/title_color"
+                    android:textSize="24sp"
+                    android:textStyle="bold" />
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="4dp"
+                app:strokeWidth="0dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="16dp"
+                        android:fontFamily="@font/sub_title_font"
+                        android:gravity="center"
+                        android:text="@string/thong_tin_khach_hang"
+                        android:textColor="@color/primary_text_color"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/tilHoTen"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="12dp"
+                        android:hint="@string/ho_ten"
+                        app:boxStrokeColor="@color/primary_text_color"
+                        app:hintTextColor="@color/primary_text_color">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/tvHoTen"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:enabled="false"
+                            android:fontFamily="@font/primary_font"
+                            android:textColor="@color/primary_text_color"
+                            android:textSize="13sp"
+                            tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/tilCCCD"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="12dp"
+                        android:hint="@string/cccd"
+                        app:boxStrokeColor="@color/primary_text_color"
+                        app:hintTextColor="@color/primary_text_color">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/tvCCCD"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:enabled="false"
+                            android:fontFamily="@font/primary_font"
+                            android:textColor="@color/primary_text_color"
+                            android:textSize="13sp"
+                            tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/tilSDT"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="12dp"
+                        android:hint="@string/so_dien_thoai"
+                        app:boxStrokeColor="@color/primary_text_color"
+                        app:hintTextColor="@color/primary_text_color">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/tvSDT"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:enabled="false"
+                            android:fontFamily="@font/primary_font"
+                            android:textColor="@color/primary_text_color"
+                            android:textSize="13sp"
+                            tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/tilNgayDat"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/ngay_dat"
+                        app:boxStrokeColor="@color/primary_text_color"
+                        app:hintTextColor="@color/primary_text_color">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/tvNgayDat"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:enabled="false"
+                            android:fontFamily="@font/primary_font"
+                            android:textColor="@color/primary_text_color"
+                            android:textSize="13sp"
+                            tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="4dp"
+                app:strokeWidth="0dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="16dp"
+                        android:fontFamily="@font/sub_title_font"
+                        android:gravity="center"
+                        android:text="@string/thong_tin_xe"
+                        android:textColor="@color/primary_text_color"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/tilTenXe"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="12dp"
+                        android:hint="@string/ten_xe"
+                        app:boxStrokeColor="@color/primary_text_color"
+                        app:hintTextColor="@color/primary_text_color">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/tvTenXe"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:enabled="false"
+                            android:fontFamily="@font/primary_font"
+                            android:textColor="@color/primary_text_color"
+                            android:textSize="13sp"
+                            tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/tilBienSo"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="12dp"
+                        android:hint="@string/bien_so"
+                        app:boxStrokeColor="@color/primary_text_color"
+                        app:hintTextColor="@color/primary_text_color">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/tvBienSo"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:enabled="false"
+                            android:fontFamily="@font/primary_font"
+                            android:textColor="@color/primary_text_color"
+                            android:textSize="13sp"
+                            tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/tilLoaiXe"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="12dp"
+                        android:hint="@string/loai_xe"
+                        app:boxStrokeColor="@color/primary_text_color"
+                        app:hintTextColor="@color/primary_text_color">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/tvLoaiXe"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:enabled="false"
+                            android:fontFamily="@font/primary_font"
+                            android:textColor="@color/primary_text_color"
+                            android:textSize="13sp"
+                            tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/tilGiaThue"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="12dp"
+                        android:hint="@string/gia_thue"
+                        app:boxStrokeColor="@color/primary_text_color"
+                        app:hintTextColor="@color/primary_text_color"
+                        app:suffixText="VNĐ">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/tvGiaThue"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:enabled="false"
+                            android:fontFamily="@font/primary_font"
+                            android:textColor="@color/primary_text_color"
+                            android:textSize="13sp"
+                            tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/tilTienCoc"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/tien_coc"
+                        app:boxStrokeColor="@color/primary_text_color"
+                        app:hintTextColor="@color/primary_text_color"
+                        app:suffixText="VNĐ">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/tvTienCoc"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:enabled="false"
+                            android:fontFamily="@font/primary_font"
+                            android:textColor="@color/primary_text_color"
+                            android:textSize="13sp"
+                            tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Rental Time Section -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="4dp"
+                app:strokeWidth="0dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="16dp"
+                        android:fontFamily="@font/sub_title_font"
+                        android:gravity="center"
+                        android:text="@string/thoi_gian_thue"
+                        android:textColor="@color/primary_text_color"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/tilNgayBatDauDK"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="12dp"
+                        android:hint="@string/ngay_bat_dau_dk"
+                        app:boxStrokeColor="@color/primary_text_color"
+                        app:hintTextColor="@color/primary_text_color">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/tvNgayBatDauDK"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:enabled="false"
+                            android:fontFamily="@font/primary_font"
+                            android:textColor="@color/primary_text_color"
+                            android:textSize="13sp"
+                            tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/tilNgayKetThucDK"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="12dp"
+                        android:hint="@string/ngay_ket_thuc_dk"
+                        app:boxStrokeColor="@color/primary_text_color"
+                        app:hintTextColor="@color/primary_text_color">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/tvNgayKetThucDK"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:enabled="false"
+                            android:fontFamily="@font/primary_font"
+                            android:textColor="@color/primary_text_color"
+                            android:textSize="13sp"
+                            tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/tilNgayBatDauTT"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="12dp"
+                        android:hint="@string/ngay_bat_dau_tt"
+                        app:boxStrokeColor="@color/primary_text_color"
+                        app:hintTextColor="@color/primary_text_color">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/tcNgayBatDauTT"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:enabled="false"
+                            android:fontFamily="@font/primary_font"
+                            android:textColor="@color/primary_text_color"
+                            android:textSize="13sp"
+                            tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/tilNgayHienTai"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/ngay_hien_tai"
+                        app:boxStrokeColor="@color/primary_text_color"
+                        app:hintTextColor="@color/primary_text_color">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/tvNgayHienTai"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:enabled="false"
+                            android:fontFamily="@font/primary_font"
+                            android:textColor="@color/primary_text_color"
+                            android:textSize="13sp"
+                            tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="4dp"
+                app:strokeWidth="0dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="16dp"
+                        android:fontFamily="@font/sub_title_font"
+                        android:gravity="center"
+                        android:text="@string/thong_tin_thanh_toan_coc"
+                        android:textColor="@color/primary_text_color"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/tilTrangThaiThanhToan"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="12dp"
+                        android:hint="@string/trang_thai_thanhtoan"
+                        app:boxStrokeColor="@color/primary_text_color"
+                        app:hintTextColor="@color/primary_text_color">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/tvTrangThaiThanhToan"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:enabled="false"
+                            android:fontFamily="@font/primary_font"
+                            android:textColor="@color/primary_text_color"
+                            android:textSize="13sp"
+                            tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/tilGhiChu"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/ghi_chu_chi_tiet"
+                        app:boxStrokeColor="@color/primary_text_color"
+                        app:hintTextColor="@color/primary_text_color">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/tvGhiChu"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/primary_font"
+                            android:gravity="top"
+                            android:minLines="2"
+                            android:textColor="@color/primary_text_color"
+                            android:textSize="13sp"
+                            tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="4dp"
+                app:strokeWidth="0dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="16dp"
+                        android:fontFamily="@font/sub_title_font"
+                        android:gravity="center"
+                        android:text="@string/thong_tin_thanh_toan"
+                        android:textColor="@color/primary_text_color"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/tilThanhTien"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="12dp"
+                        android:hint="@string/thanh_tien"
+                        app:boxStrokeColor="@color/primary_text_color"
+                        app:hintTextColor="@color/primary_text_color"
+                        app:suffixText="VNĐ">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/tvThanhTien"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:enabled="false"
+                            android:fontFamily="@font/primary_font"
+                            android:textColor="@color/primary_text_color"
+                            android:textSize="13sp"
+                            tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/tilThucTra"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="12dp"
+                        android:hint="@string/so_tien_phai_tra"
+                        app:boxStrokeColor="@color/primary_text_color"
+                        app:hintTextColor="@color/primary_text_color"
+                        app:suffixText="VNĐ">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/tvThucTra"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:enabled="false"
+                            android:fontFamily="@font/primary_font"
+                            android:textColor="@color/primary_text_color"
+                            android:textSize="13sp"
+                            tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/tilPhuongThuc"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="12dp"
+                        android:hint="@string/phuong_thuc"
+                        app:hintTextColor="@color/primary_text_color">
+
+                        <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                            android:id="@+id/spinnerPhuongThuc"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/primary_font"
+                            android:inputType="none"
+                            android:textColor="@color/primary_text_color"
+                            android:textSize="13sp"
+                            tools:ignore="SpeakableTextPresentCheck,VisualLintTextFieldSize" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:padding="5dp"
+                android:weightSum="3">
+
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:layout_weight="1"
+                    app:cardCornerRadius="12dp"
+                    app:cardElevation="4dp"
+                    app:strokeWidth="0dp">
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnDungThue"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:fontFamily="@font/sub_title_font"
+                        android:gravity="center"
+                        android:maxLines="2"
+                        android:text="@string/ket_thuc_thue"
+                        android:textColor="@android:color/white"
+                        android:textSize="12sp"
+                        app:backgroundTint="@color/title_color"
+                        app:cornerRadius="12dp" />
+                </com.google.android.material.card.MaterialCardView>
+
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="8dp"
+                    android:layout_weight="1"
+                    app:cardCornerRadius="12dp"
+                    app:cardElevation="4dp"
+                    app:strokeWidth="0dp">
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnBatDauThue"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:fontFamily="@font/sub_title_font"
+                        android:gravity="center"
+                        android:maxLines="2"
+                        android:text="@string/thue_xe"
+                        android:textColor="@android:color/white"
+                        android:textSize="12sp"
+                        app:backgroundTint="@color/title_color"
+                        app:cornerRadius="12dp" />
+                </com.google.android.material.card.MaterialCardView>
+
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_weight="1"
+                    app:cardCornerRadius="12dp"
+                    app:cardElevation="4dp"
+                    app:strokeWidth="0dp">
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnHuyThue"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:fontFamily="@font/sub_title_font"
+                        android:gravity="center"
+                        android:maxLines="2"
+                        android:text="@string/huy_thue"
+                        android:textColor="@android:color/white"
+                        android:textSize="12sp"
+                        app:backgroundTint="@color/title_color"
+                        app:cornerRadius="12dp" />
+                </com.google.android.material.card.MaterialCardView>
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+    <include
+        android:id="@+id/emptyView"
+        layout="@layout/fragement_user_rent_vehicle_empty"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="visible" />
+
+</FrameLayout>

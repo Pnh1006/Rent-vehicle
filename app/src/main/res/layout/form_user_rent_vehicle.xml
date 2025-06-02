@@ -1,0 +1,452 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/primary_background"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <!-- Title Card -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="4dp"
+            app:strokeWidth="0dp">
+
+            <TextView
+                android:id="@+id/title_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/title_font"
+                android:gravity="center"
+                android:padding="20dp"
+                android:text="@string/thue_xe"
+                android:textColor="@color/title_color"
+                android:textSize="28sp"
+                android:textStyle="bold" />
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Customer Information Card -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="4dp"
+            app:strokeWidth="0dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:fontFamily="@font/sub_title_font"
+                    android:gravity="center"
+                    android:text="@string/thong_tin_khach_hang"
+                    android:textColor="@color/primary_text_color"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
+                    android:hint="@string/ho_ten"
+                    app:boxStrokeColor="@color/primary_text_color"
+                    app:hintTextColor="@color/primary_text_color">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/tvHoTen"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/primary_font"
+                        android:textColor="@color/primary_text_color"
+                        android:textSize="15sp"
+                        tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
+                    android:hint="@string/cccd"
+                    app:boxStrokeColor="@color/primary_text_color"
+                    app:hintTextColor="@color/primary_text_color">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/tvCCCD"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/primary_font"
+                        android:inputType="number"
+                        android:textColor="@color/primary_text_color"
+                        android:textSize="15sp"
+                        tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
+                    android:hint="@string/so_dien_thoai"
+                    app:boxStrokeColor="@color/primary_text_color"
+                    app:hintTextColor="@color/primary_text_color">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/tvSDT"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/primary_font"
+                        android:inputType="phone"
+                        android:textColor="@color/primary_text_color"
+                        android:textSize="15sp"
+                        tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/ngay_dat"
+                    app:boxStrokeColor="@color/primary_text_color"
+                    app:hintTextColor="@color/primary_text_color">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/tvNgayDat"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:clickable="true"
+                        android:focusable="false"
+                        android:fontFamily="@font/primary_font"
+                        android:inputType="none"
+                        android:textColor="@color/primary_text_color"
+                        android:textSize="15sp"
+                        tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Vehicle Information Card -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="4dp"
+            app:strokeWidth="0dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:fontFamily="@font/sub_title_font"
+                    android:gravity="center"
+                    android:text="@string/thong_tin_xe"
+                    android:textColor="@color/primary_text_color"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
+                    android:hint="@string/ten_xe"
+                    app:boxStrokeColor="@color/primary_text_color"
+                    app:hintTextColor="@color/primary_text_color">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/tvTenXe"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/primary_font"
+                        android:textColor="@color/primary_text_color"
+                        android:textSize="15sp"
+                        tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
+                    android:hint="@string/gia_thue"
+                    app:boxStrokeColor="@color/primary_text_color"
+                    app:hintTextColor="@color/primary_text_color"
+                    app:suffixText="VNĐ">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/tvGiaThue"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/primary_font"
+                        android:inputType="numberDecimal"
+                        android:textColor="@color/title_color"
+                        android:textSize="16sp"
+                        tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/tien_coc"
+                    app:boxStrokeColor="@color/primary_text_color"
+                    app:hintTextColor="@color/primary_text_color"
+                    app:suffixText="VNĐ">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/tvTienCoc"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/primary_font"
+                        android:inputType="numberDecimal"
+                        android:textColor="@color/title_color"
+                        android:textSize="16sp"
+                        tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Rental Period Card -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="4dp"
+            app:strokeWidth="0dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:fontFamily="@font/sub_title_font"
+                    android:gravity="center"
+                    android:text="@string/thoi_gian_thue"
+                    android:textColor="@color/primary_text_color"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
+                    android:hint="@string/ngay_bat_dau_dk"
+                    app:boxStrokeColor="@color/primary_text_color"
+                    app:hintTextColor="@color/primary_text_color">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/edNgayBatDauDK"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:clickable="true"
+                        android:focusable="false"
+                        android:fontFamily="@font/primary_font"
+                        android:inputType="none"
+                        android:textColor="@color/primary_text_color"
+                        android:textSize="15sp"
+                        tools:ignore="SpeakableTextPresentCheck,VisualLintTextFieldSize,TextContrastCheck" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/ngay_ket_thuc_dk"
+                    app:boxStrokeColor="@color/primary_text_color"
+                    app:hintTextColor="@color/primary_text_color">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/edNgayKetThucDK"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:clickable="true"
+                        android:focusable="false"
+                        android:fontFamily="@font/primary_font"
+                        android:inputType="none"
+                        android:textColor="@color/primary_text_color"
+                        android:textSize="15sp"
+                        tools:ignore="SpeakableTextPresentCheck,VisualLintTextFieldSize,TextContrastCheck" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Payment Information Card -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="4dp"
+            app:strokeWidth="0dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:fontFamily="@font/sub_title_font"
+                    android:gravity="center"
+                    android:text="@string/thong_tin_thanh_toan"
+                    android:textColor="@color/primary_text_color"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
+                    android:hint="@string/thanh_tien"
+                    app:boxStrokeColor="@color/primary_text_color"
+                    app:hintTextColor="@color/primary_text_color"
+                    app:suffixText="VNĐ">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/tvThanhTien"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/primary_font"
+                        android:inputType="numberDecimal"
+                        android:textColor="@color/title_color"
+                        android:textSize="20sp"
+                        tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
+                    android:hint="@string/phuong_thuc"
+                    app:hintTextColor="@color/primary_text_color">
+
+                    <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                        android:id="@+id/spinnerPhuongThuc"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/primary_font"
+                        android:inputType="none"
+                        android:textColor="@color/primary_text_color"
+                        android:textSize="15sp"
+                        tools:ignore="SpeakableTextPresentCheck,VisualLintTextFieldSize" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/ghi_chu_chi_tiet"
+                    app:boxStrokeColor="@color/primary_text_color"
+                    app:hintTextColor="@color/primary_text_color">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/edGhiChu"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/primary_font"
+                        android:gravity="top"
+                        android:inputType="textMultiLine"
+                        android:lines="3"
+                        android:textColor="@color/primary_text_color"
+                        android:textSize="15sp"
+                        tools:ignore="VisualLintTextFieldSize,TextContrastCheck" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Buttons -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:paddingBottom="16dp"
+            android:weightSum="2">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnThanhToan"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_weight="1"
+                android:drawableStart="@android:drawable/ic_secure"
+                android:drawablePadding="8dp"
+                android:fontFamily="@font/title_font"
+                android:text="@string/thanh_toan"
+                android:textColor="@android:color/white"
+                android:textSize="16sp"
+                app:backgroundTint="@color/title_color"
+                app:cornerRadius="12dp"
+                tools:ignore="VisualLintButtonSize" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnQuayVe"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_weight="1"
+                android:drawableStart="@android:drawable/ic_menu_revert"
+                android:drawablePadding="8dp"
+                android:fontFamily="@font/title_font"
+                android:text="@string/trang_chu"
+                android:textColor="@color/title_color"
+                android:textSize="16sp"
+                app:backgroundTint="@color/primary_background"
+                app:cornerRadius="12dp"
+                app:rippleColor="@color/title_color"
+                app:strokeColor="@color/title_color"
+                app:strokeWidth="1dp"
+                tools:ignore="VisualLintButtonSize" />
+
+        </LinearLayout>
+
+        <FrameLayout
+            android:id="@+id/container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone" />
+
+    </LinearLayout>
+</ScrollView>
