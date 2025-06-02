@@ -128,6 +128,9 @@ public class FragmentUserRentVehicle extends Fragment {
                         Log.d(TAG, "Set container visibility to VISIBLE");
                     }
 
+                    // Clear any existing fragments in the container
+                    getChildFragmentManager().popBackStackImmediate(null, androidx.fragment.app.FragmentManager.POP_BACK_STACK_INCLUSIVE);
+
                     UserRentVehicleStart rentVehicleStartFragment = new UserRentVehicleStart();
                     Bundle fragmentArgs = new Bundle();
                     fragmentArgs.putSerializable("xe", xe);
@@ -136,7 +139,7 @@ public class FragmentUserRentVehicle extends Fragment {
                     try {
                         getChildFragmentManager().beginTransaction()
                             .replace(R.id.user_rent_vehicle_container, rentVehicleStartFragment)
-                            .commitNow();
+                            .commit();
                         Log.d(TAG, "Successfully added UserRentVehicleStart fragment");
                     } catch (Exception e) {
                         Log.e(TAG, "Error adding UserRentVehicleStart fragment", e);
@@ -170,8 +173,11 @@ public class FragmentUserRentVehicle extends Fragment {
         super.onResume();
         Log.d(TAG, "onResume called");
         
-        // Refresh rental info when fragment becomes visible again
-        if (currentUser != null) {
+        // Only load latest rental info if we're not coming from homepage
+        Bundle args = getArguments();
+        boolean isFromHomepage = args != null && args.getBoolean("isFromHomepage", false);
+        
+        if (!isFromHomepage && currentUser != null) {
             loadLatestRentalInfo();
         }
     }
@@ -412,13 +418,35 @@ public class FragmentUserRentVehicle extends Fragment {
     private void showRentalInfoView() {
         if (getView() == null) return;
 
+        // Clear any existing fragments in the container
+        getChildFragmentManager().popBackStackImmediate(null, androidx.fragment.app.FragmentManager.POP_BACK_STACK_INCLUSIVE);
+
+        // Find all views
         View scrollViewRentalInfo = getView().findViewById(R.id.scrollViewRentalInfo);
         View emptyView = getView().findViewById(R.id.emptyView);
         View rentVehicleContainer = getView().findViewById(R.id.user_rent_vehicle_container);
+        View recyclerViewLichSuThue = getView().findViewById(R.id.recyclerViewLichSuThue);
 
-        if (scrollViewRentalInfo != null) scrollViewRentalInfo.setVisibility(View.VISIBLE);
+        // Hide all views first
+        if (scrollViewRentalInfo != null) scrollViewRentalInfo.setVisibility(View.GONE);
         if (emptyView != null) emptyView.setVisibility(View.GONE);
         if (rentVehicleContainer != null) rentVehicleContainer.setVisibility(View.GONE);
+        if (recyclerViewLichSuThue != null) recyclerViewLichSuThue.setVisibility(View.GONE);
+
+        // Remove any fragments in the container
+        Fragment existingFragment = getChildFragmentManager().findFragmentById(R.id.user_rent_vehicle_container);
+        if (existingFragment != null) {
+            getChildFragmentManager().beginTransaction()
+                .remove(existingFragment)
+                .commitNow(); // Use commitNow to ensure immediate execution
+        }
+
+        // Show only the rental info view
+        if (scrollViewRentalInfo != null) {
+            scrollViewRentalInfo.setVisibility(View.VISIBLE);
+        }
+
+        Log.d(TAG, "showRentalInfoView: Updated view visibilities");
     }
 
     private void showEmptyView() {
@@ -855,11 +883,13 @@ public class FragmentUserRentVehicle extends Fragment {
                         container.setVisibility(View.VISIBLE);
                     }
 
+                    // Clear back stack before adding new fragment
+                    getChildFragmentManager().popBackStackImmediate(null, androidx.fragment.app.FragmentManager.POP_BACK_STACK_INCLUSIVE);
+
                     Log.d("Navigation", "Executing fragment transaction");
-                    FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
+                    FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
                     transaction.replace(R.id.user_rent_vehicle_container, paymentNotiFragment);
-                    transaction.addToBackStack(null);
-                    transaction.commitAllowingStateLoss();
+                    transaction.commit();
                     Log.d("Navigation", "Fragment transaction completed");
                 }
             }
@@ -1226,5 +1256,9 @@ public class FragmentUserRentVehicle extends Fragment {
             Log.e("RentVehicle", "Error updating rental info UI: " + e.getMessage());
             e.printStackTrace();
         }
+    }
+
+    public void refreshRentalInfo() {
+        loadLatestRentalInfo();
     }
 }

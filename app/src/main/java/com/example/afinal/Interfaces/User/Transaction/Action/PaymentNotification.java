@@ -1,6 +1,5 @@
 package com.example.afinal.Interfaces.User.Transaction.Action;
 
-import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -8,20 +7,21 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.AutoCompleteTextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
 
 import com.example.afinal.Database.DAO.ThanhToanDAO;
+import com.example.afinal.Database.DAO.XeDAO;
 import com.example.afinal.Database.Model.ThanhToan;
+import com.example.afinal.Database.Model.Xe;
 import com.example.afinal.Interfaces.User.RentVehicle.FragmentUserRentVehicle;
-import com.example.afinal.Interfaces.User.RentalHistory.FragmentUserRentalHistory;
 import com.example.afinal.R;
+import com.example.afinal.Interfaces.User.RentVehicle.UserRentVehicleStart;
 
 public class PaymentNotification extends Fragment {
     private TextView tvResult, tvSubMessage;
@@ -30,11 +30,14 @@ public class PaymentNotification extends Fragment {
     private int maThueXe = -1;
     private int maXe = -1;
     private ThanhToanDAO thanhToanDAO;
+    private XeDAO xeDAO;
+    private Xe selectedXe;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         thanhToanDAO = new ThanhToanDAO(requireContext());
+        xeDAO = new XeDAO(requireContext());
     }
 
     @Nullable
@@ -60,14 +63,11 @@ public class PaymentNotification extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        
-        // Đảm bảo view và parent container đều visible
         view.setVisibility(View.VISIBLE);
         if (view.getParent() instanceof View) {
             ((View) view.getParent()).setVisibility(View.VISIBLE);
         }
 
-        // Sử dụng ViewTreeObserver để theo dõi layout
         view.getViewTreeObserver().addOnGlobalLayoutListener(() -> {
             Log.d("PaymentNotification", "OnGlobalLayout - width: " + view.getWidth() + 
                 ", height: " + view.getHeight() + 
@@ -104,7 +104,6 @@ public class PaymentNotification extends Fragment {
 
     private void initViews(View view) {
         try {
-            // Tìm các view theo ID chính xác từ layout
             tvResult = view.findViewById(R.id.tvThanhToanThanhCong);
             tvSubMessage = view.findViewById(R.id.tvSubMessage);
             btnTrangChu = view.findViewById(R.id.btnTrangChu);
@@ -113,14 +112,12 @@ public class PaymentNotification extends Fragment {
 
             Log.d("PaymentNotification", "Finding views - tvResult ID: " + R.id.tvThanhToanThanhCong);
 
-            // Kiểm tra và log kết quả tìm view
             if (tvResult == null) Log.e("PaymentNotification", "tvResult not found");
             if (tvSubMessage == null) Log.e("PaymentNotification", "tvSubMessage not found");
             if (btnTrangChu == null) Log.e("PaymentNotification", "btnTrangChu not found");
             if (btnThongTinThueXe == null) Log.e("PaymentNotification", "btnThongTinThueXe not found");
             if (btnThongTinGiaoDich == null) Log.e("PaymentNotification", "btnThongTinGiaoDich not found");
 
-            // Đảm bảo các view đều visible và có nội dung mặc định
             if (tvResult != null) {
                 tvResult.setVisibility(View.VISIBLE);
                 tvResult.setText("Đang xử lý"); // Giá trị mặc định
@@ -139,7 +136,6 @@ public class PaymentNotification extends Fragment {
                 btnThongTinGiaoDich.setVisibility(View.VISIBLE);
             }
 
-            // Log trạng thái visibility của các view
             Log.d("PaymentNotification", "View visibility - " +
                 "tvResult: " + (tvResult != null ? tvResult.getVisibility() : "null") + ", " +
                 "tvSubMessage: " + (tvSubMessage != null ? tvSubMessage.getVisibility() : "null") + ", " +
@@ -147,7 +143,6 @@ public class PaymentNotification extends Fragment {
                 "btnThongTinThueXe: " + (btnThongTinThueXe != null ? btnThongTinThueXe.getVisibility() : "null") + ", " +
                 "btnThongTinGiaoDich: " + (btnThongTinGiaoDich != null ? btnThongTinGiaoDich.getVisibility() : "null"));
 
-            // Log layout parameters
             View rootView = view.getRootView();
             Log.d("PaymentNotification", "Root view dimensions - " +
                 "width: " + rootView.getWidth() + ", " +
@@ -170,11 +165,17 @@ public class PaymentNotification extends Fragment {
                 maThueXe = args.getInt("maThueXe", -1);
                 maXe = args.getInt("maXe", -1);
 
+                // Load vehicle information
+                if (maXe != -1) {
+                    selectedXe = xeDAO.getById(maXe);
+                }
+
                 Log.d("PaymentNotification", "Setting up data - result: " + result +
                     ", subMessage: " + subMessage +
                     ", isStopRental: " + isStopRental +
                     ", maThueXe: " + maThueXe +
-                    ", maXe: " + maXe);
+                    ", maXe: " + maXe +
+                    ", selectedXe: " + (selectedXe != null ? selectedXe.getTenXe() : "null"));
 
                 if (tvResult != null) {
                     tvResult.setText(result);
@@ -206,13 +207,11 @@ public class PaymentNotification extends Fragment {
         try {
             ThanhToan thanhToan = thanhToanDAO.getByMaThueXe(maThueXe);
             if (thanhToan != null && thanhToan.getTrangThai() == 0) { // 0 = Đã thanh toán
-                // Cập nhật trạng thái thuê xe và xe
                 Fragment parentFragment = getParentFragment();
                 if (parentFragment instanceof FragmentUserRentVehicle) {
                     ((FragmentUserRentVehicle) parentFragment).updateRentalStatusAfterPayment(maThueXe, maXe);
                 }
                 
-                // Cập nhật giao diện
                 tvResult.setText("Đã thanh toán");
                 tvSubMessage.setText("Cảm ơn bạn đã sử dụng dịch vụ");
                 tvSubMessage.setVisibility(View.VISIBLE);
@@ -224,55 +223,91 @@ public class PaymentNotification extends Fragment {
 
     private void setupButtonListeners() {
         btnTrangChu.setOnClickListener(v -> {
-            // Quay về trang chủ
             if (getActivity() != null) {
                 ViewPager viewPager = getActivity().findViewById(R.id.view_pager);
                 if (viewPager != null) {
-                    viewPager.setCurrentItem(0); // Chuyển về tab trang chủ
+                    viewPager.setCurrentItem(0);
                 }
             }
         });
 
         btnThongTinThueXe.setOnClickListener(v -> {
-            // Hiển thị thông tin thuê xe trong tab thuê xe
-            if (getActivity() != null) {
-                // Chuyển về tab thuê xe
-                ViewPager viewPager = getActivity().findViewById(R.id.view_pager);
-                if (viewPager != null) {
-                    viewPager.setCurrentItem(1); // Chuyển về tab thuê xe
+            try {
+                FragmentActivity activity = getActivity();
+                if (activity == null) {
+                    Log.e("PaymentNotification", "Activity is null");
+                    return;
                 }
 
-                // Tìm FragmentUserRentVehicle và cập nhật UI
-                Fragment parentFragment = getParentFragment();
-                if (parentFragment instanceof FragmentUserRentVehicle) {
-                    FragmentUserRentVehicle rentVehicleFragment = (FragmentUserRentVehicle) parentFragment;
-                    
-                    // Xóa PaymentNotification khỏi back stack và fragment manager
-                    if (getFragmentManager() != null) {
-                        getFragmentManager().popBackStack();
-                        FragmentTransaction ft = getFragmentManager().beginTransaction();
-                        ft.remove(this);
-                        ft.commit();
-                    }
-                    
-                    // Ẩn container và các view không cần thiết
-                    View container = getActivity().findViewById(R.id.user_rent_vehicle_container);
-                    if (container != null) {
-                        container.setVisibility(View.GONE);
-                    }
-                    
-                    // Cập nhật UI để hiển thị thông tin thuê xe
-                    rentVehicleFragment.showRentalInfo();
+                FragmentManager parentFragmentManager = getParentFragmentManager();
+                if (parentFragmentManager == null) {
+                    Log.e("PaymentNotification", "Parent FragmentManager is null");
+                    return;
                 }
+
+                Fragment parentFragment = getParentFragment();
+                if (!(parentFragment instanceof FragmentUserRentVehicle)) {
+                    Log.e("PaymentNotification", "Parent fragment is not FragmentUserRentVehicle");
+                    return;
+                }
+
+                FragmentUserRentVehicle rentVehicleFragment = (FragmentUserRentVehicle) parentFragment;
+
+                // Xóa fragment notification hiện tại
+                parentFragmentManager.popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                if (getView() != null) {
+                    getView().setVisibility(View.GONE);
+                }
+
+                // Xóa các fragment con trong FragmentUserRentVehicle
+                FragmentManager childFragmentManager = rentVehicleFragment.getChildFragmentManager();
+                if (childFragmentManager == null) {
+                    Log.e("PaymentNotification", "Child FragmentManager is null");
+                    return;
+                }
+                childFragmentManager.popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+
+                View rentVehicleView = rentVehicleFragment.getView();
+                if (rentVehicleView != null) {
+                    View scrollViewRentalInfo = rentVehicleView.findViewById(R.id.scrollViewRentalInfo);
+                    View emptyView = rentVehicleView.findViewById(R.id.emptyView);
+                    View rentVehicleContainer = rentVehicleView.findViewById(R.id.user_rent_vehicle_container);
+                    View recyclerViewLichSuThue = rentVehicleView.findViewById(R.id.recyclerViewLichSuThue);
+
+                    // Ẩn các view không cần thiết
+                    if (emptyView != null) emptyView.setVisibility(View.GONE);
+                    if (rentVehicleContainer != null) rentVehicleContainer.setVisibility(View.GONE);
+                    if (recyclerViewLichSuThue != null) recyclerViewLichSuThue.setVisibility(View.GONE);
+                    
+                    // Hiển thị thông tin chi tiết thuê xe
+                    if (scrollViewRentalInfo != null) {
+                        scrollViewRentalInfo.setVisibility(View.VISIBLE);
+                    }
+
+                    // Load thông tin thuê xe mới nhất
+                    rentVehicleFragment.refreshRentalInfo();
+                }
+
+            } catch (Exception e) {
+                Log.e("PaymentNotification", "Error in btnThongTinThueXe click: " + e.getMessage());
+                e.printStackTrace();
             }
         });
 
         btnThongTinGiaoDich.setOnClickListener(v -> {
-            // Chuyển sang tab lịch sử và hiển thị thông tin giao dịch
             if (getActivity() != null) {
                 ViewPager viewPager = getActivity().findViewById(R.id.view_pager);
                 if (viewPager != null) {
-                    viewPager.setCurrentItem(2); // Chuyển sang tab lịch sử
+                    viewPager.setCurrentItem(2); // Chuyển đến tab lịch sử giao dịch
+                }
+
+                // Xóa fragment notification hiện tại
+                FragmentManager parentFragmentManager = getParentFragmentManager();
+                if (parentFragmentManager != null) {
+                    parentFragmentManager.popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                }
+                if (getView() != null) {
+                    getView().setVisibility(View.GONE);
                 }
             }
         });
