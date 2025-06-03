@@ -51,6 +51,7 @@
                         android:id="@+id/edHoTen"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:enabled="false"
                         android:fontFamily="@font/primary_font"
                         android:textColor="@color/primary_text_color"
                         android:textSize="13sp"
@@ -71,8 +72,8 @@
                         android:id="@+id/edSDT"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:enabled="false"
                         android:fontFamily="@font/primary_font"
-                        android:inputType="phone"
                         android:textColor="@color/primary_text_color"
                         android:textSize="13sp"
                         tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />
@@ -92,8 +93,8 @@
                         android:id="@+id/edCCCD"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:enabled="false"
                         android:fontFamily="@font/primary_font"
-                        android:inputType="number"
                         android:textColor="@color/primary_text_color"
                         android:textSize="13sp"
                         tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />

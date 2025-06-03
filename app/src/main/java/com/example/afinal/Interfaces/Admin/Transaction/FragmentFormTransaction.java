@@ -25,6 +25,7 @@ import com.example.afinal.Database.Model.Xe;
 import com.example.afinal.R;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.android.material.textfield.MaterialAutoCompleteTextView;
+import com.google.android.material.textfield.TextInputEditText;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -32,7 +33,8 @@ import java.util.Locale;
 
 public class FragmentFormTransaction extends Fragment {
     private TextInputLayout  tilTrangThai;
-    private EditText edHoTen, edSDT, edCCCD, edTenXe, edTienCoc;
+    private TextInputEditText edHoTen, edSDT, edCCCD;
+    private EditText edTenXe, edTienCoc;
     private EditText edSoTien, edNoiDung, edNgayThucHien, edNgayThanhCong, edMaGiaoDich, edGhiChu;
     private MaterialAutoCompleteTextView edPhuongThucThanhToan, edTrangThai;
     private Button btnLuu, btnHuy;
@@ -153,16 +155,16 @@ public class FragmentFormTransaction extends Fragment {
                 edSoTien.setText(String.valueOf(thanhToan.getSoTien()));
                 edNoiDung.setText(thanhToan.getNoiDung());
                 edNgayThucHien.setText(thanhToan.getNgayThucHien());
-                
+
                 String statusText = getStatusText(thanhToan.getTrangThai());
                 edTrangThai.setText(statusText, false);
-                
+
                 if (statusText.equals("Đã thanh toán")) {
                     edNgayThanhCong.setText(thanhToan.getNgayThanhCong());
                 } else {
                     edNgayThanhCong.setText("");
                 }
-                
+
                 edPhuongThucThanhToan.setText(thanhToan.getPhuongThuc());
                 edMaGiaoDich.setText(thanhToan.getMaGiaoDich());
                 edGhiChu.setText(thanhToan.getGhiChu());
@@ -190,7 +192,7 @@ public class FragmentFormTransaction extends Fragment {
             if (isEditMode && thanhToan != null) {
                 String newStatus = edTrangThai.getText().toString();
                 String newCompletionDate = edNgayThanhCong.getText().toString();
-                
+
                 thanhToan.setTrangThai(getStatusValue(newStatus));
                 thanhToan.setNgayThanhCong(newCompletionDate);
 
@@ -277,5 +279,22 @@ public class FragmentFormTransaction extends Fragment {
     private void setupListeners() {
         btnLuu.setOnClickListener(v -> saveTransaction());
         btnHuy.setOnClickListener(v -> goBack());
+    }
+
+    private void loadThanhToanInfo() {
+        if (thanhToan == null) return;
+
+        // Load customer information
+        ThueXeDAO thueXeDAO = new ThueXeDAO(requireContext());
+        ThueXe thueXe = thueXeDAO.getThueXeById(thanhToan.getMaThueXe());
+        if (thueXe != null) {
+            NguoiDungDAO nguoiDungDAO = new NguoiDungDAO(requireContext());
+            NguoiDung nguoiDung = nguoiDungDAO.getById(thueXe.getMaND());
+            if (nguoiDung != null) {
+                edHoTen.setText(nguoiDung.getHoTen());
+                edSDT.setText(nguoiDung.getSdt());
+                edCCCD.setText(nguoiDung.getCccd());
+            }
+        }
     }
 }
